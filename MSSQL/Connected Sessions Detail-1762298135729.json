@@ -1,0 +1,402 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_HOMELAB2507MONITORING",
+      "label": "HOMELAB2507Monitoring",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "mssql",
+      "pluginName": "Microsoft SQL Server"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.0.2"
+    },
+    {
+      "type": "datasource",
+      "id": "mssql",
+      "name": "Microsoft SQL Server",
+      "version": "12.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ClientSessionValidateDate"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 194
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "ClientSessionValidateDate"
+          }
+        ]
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "dataset": "Citrix2402LTSRLogging",
+          "datasource": {
+            "type": "mssql",
+            "uid": "${DS_HOMELAB2507MONITORING}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \r\nt2.Upn, \r\nt2.UserName,\r\nt2.Domain, \r\nt1.ClientName, \r\nt1.ClientAddress, \r\nt1.ClientVersion, \r\nt1.ClientPlatform, \r\nt3.DnsName, \r\nt3.IpAddress, \r\nt3.AgentVersion, \r\nt3.IsInMaintenanceMode, \r\nt3.OSType, \r\nt1.ConnectedViaHostName, \r\nt1.ConnectedViaIPAddress, \r\nt1.LaunchedViaHostName, \r\nt1.LaunchedViaIPAddress, \r\nt1.IsReconnect, \r\nt1.IsSecureIca, \r\nt1.Protocol, \r\nt1.LogOnStartDate, \r\nt1.LogOnEndDate,\r\nDATEDIFF(SECOND, t1.LogOnStartDate, t1.LogOnEndDate) AS LogOnElapsedSeconds, \r\nt1.BrokeringDuration, \r\nt1.BrokeringDate, \r\nt1.ClientSessionValidateDate, \r\nt1.ServerSessionValidateDate, \r\nt1.EstablishmentDate, \r\nt1.HdxStartDate, \r\nt1.HdxEndDate,\r\nDATEDIFF(SECOND, t1.HdxStartDate, t1.HdxEndDate) AS HdxElapsedSeconds,\r\nt1.AuthenticationDuration,\r\nCAST(t1.AuthenticationDuration AS FLOAT) / 1000 AS AuthenticationSeconds,\r\nt1.GpoStartDate, \r\nt1.GpoEndDate,\r\nDATEDIFF(SECOND, t1.GpoStartDate, t1.GpoEndDate) AS GpoElapsedSeconds,\r\nt1.LogOnScriptsStartDate, \r\nt1.LogOnScriptsEndDate,\r\nDATEDIFF(SECOND, t1.LogOnScriptsStartDate, t1.LogOnScriptsEndDate) AS LogOnScriptsElapsedSeconds,\r\nt1.ProfileLoadStartDate, \r\nt1.ProfileLoadEndDate, \r\nDATEDIFF(SECOND, t1.ProfileLoadStartDate, t1.ProfileLoadEndDate) AS ProfileLoadElapsedSeconds,\r\nt1.InteractiveStartDate, \r\nt1.InteractiveEndDate, \r\nDATEDIFF(SECOND, t1.InteractiveStartDate, t1.InteractiveEndDate) AS InteractiveElapsedSeconds,\r\nt2.ID\r\nFROM (\r\n    SELECT SessionKey, UserId, MachineId\r\n    FROM MonitorData.Session\r\n    WHERE ConnectionState = 5\r\n) AS subquery\r\n    LEFT JOIN MonitorData.Connection  AS t1 ON subquery.SessionKey = t1.SessionKey\r\n    LEFT JOIN [MonitorData].[User] AS t2 ON subquery.UserId = t2.ID\r\n    LEFT JOIN [MonitorData].[Machine] AS t3 ON subquery.MachineId = t3.Id\r\nWHERE t2.UserName IN (${ConnectedUsers});",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Connected Sessions Detail - LTSR Farm",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "AuthenticationDuration": true,
+              "GpoEndDate": true,
+              "GpoStartDate": true,
+              "HdxEndDate": true,
+              "HdxStartDate": true,
+              "InteractiveEndDate": true,
+              "InteractiveStartDate": true,
+              "LogOnEndDate": true,
+              "LogOnScriptsEndDate": true,
+              "LogOnScriptsStartDate": true,
+              "LogOnStartDate": true,
+              "ProfileLoadEndDate": true,
+              "ProfileLoadStartDate": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "AgentVersion": 9,
+              "AuthenticationDuration": 35,
+              "AuthenticationSeconds": 22,
+              "BrokeringDate": 29,
+              "BrokeringDuration": 19,
+              "ClientAddress": 4,
+              "ClientName": 3,
+              "ClientPlatform": 6,
+              "ClientSessionValidateDate": 30,
+              "ClientVersion": 5,
+              "ConnectedViaHostName": 12,
+              "ConnectedViaIPAddress": 13,
+              "DnsName": 7,
+              "Domain": 2,
+              "EstablishmentDate": 32,
+              "GpoElapsedSeconds": 23,
+              "GpoEndDate": 37,
+              "GpoStartDate": 36,
+              "HdxElapsedSeconds": 21,
+              "HdxEndDate": 34,
+              "HdxStartDate": 33,
+              "ID": 44,
+              "InteractiveElapsedSeconds": 26,
+              "InteractiveEndDate": 43,
+              "InteractiveStartDate": 42,
+              "IpAddress": 8,
+              "IsInMaintenanceMode": 10,
+              "IsReconnect": 16,
+              "IsSecureIca": 17,
+              "LaunchedViaHostName": 14,
+              "LaunchedViaIPAddress": 15,
+              "LogOnElapsedSeconds": 20,
+              "LogOnEndDate": 28,
+              "LogOnScriptsElapsedSeconds": 24,
+              "LogOnScriptsEndDate": 39,
+              "LogOnScriptsStartDate": 38,
+              "LogOnStartDate": 27,
+              "OSType": 11,
+              "ProfileLoadElapsedSeconds": 25,
+              "ProfileLoadEndDate": 41,
+              "ProfileLoadStartDate": 40,
+              "Protocol": 18,
+              "ServerSessionValidateDate": 31,
+              "Upn": 0,
+              "UserName": 1
+            },
+            "renameByName": {
+              "AuthenticationSeconds": "Authentication Time (s)",
+              "BrokeringDuration": "Brokering Time (s)",
+              "GpoElapsedSeconds": "GPO Time (s)",
+              "HdxElapsedSeconds": "HDX Time (s)",
+              "InteractiveElapsedSeconds": "Interactive Session (s)",
+              "IsInMaintenanceMode": "",
+              "LogOnElapsedSeconds": "LogOn Time (s)",
+              "LogOnScriptsElapsedSeconds": "LogOn Scripts (s)",
+              "ProfileLoadElapsedSeconds": "Profile Load (s)",
+              "Upn": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 6,
+      "interval": "5m",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "dataset": "Citrix2402LTSRLogging",
+          "datasource": {
+            "type": "mssql",
+            "uid": "${DS_HOMELAB2507MONITORING}"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\r\n  t4.CollectedDate AS time,\r\n  CONCAT(t2.UserName, ' - ', t1.DNSName, ' - ', subquery.SessionKey) AS metric,\r\n  t4.IcaRttMS\r\nFROM (\r\n    SELECT SessionKey, UserId, MachineId\r\n    FROM MonitorData.Session\r\n    WHERE ConnectionState = 5\r\n) AS subquery\r\nLEFT JOIN [MonitorData].[Connection] AS t3 ON subquery.SessionKey = t3.SessionKey\r\nLEFT JOIN [MonitorData].[User] AS t2 ON subquery.UserId = t2.ID\r\nLEFT JOIN [MonitorData].[SessionMetricsV2] AS t4 ON subquery.SessionKey = t4.SessionId\r\nLEFT JOIN [MonitorData].[Machine] AS t1 ON subquery.MachineId = t1.Id\r\nWHERE t2.UserName IN (${ConnectedUsers});",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "ICA RTT (ms)",
+      "transformations": [
+        {
+          "id": "prepareTimeSeries",
+          "options": {
+            "format": "multi"
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "mssql",
+          "uid": "${DS_HOMELAB2507MONITORING}"
+        },
+        "definition": "SELECT \nt2.UserName\nFROM (\n    SELECT SessionKey, UserId\n    FROM MonitorData.Session\n    WHERE ConnectionState = 5\n) AS subquery\n    LEFT JOIN MonitorData.Connection  AS t1 ON subquery.SessionKey = t1.SessionKey\n    LEFT JOIN [MonitorData].[User] AS t2 ON subquery.UserId = t2.ID;",
+        "includeAll": true,
+        "label": "Users",
+        "multi": true,
+        "name": "ConnectedUsers",
+        "options": [],
+        "query": "SELECT \nt2.UserName\nFROM (\n    SELECT SessionKey, UserId\n    FROM MonitorData.Session\n    WHERE ConnectionState = 5\n) AS subquery\n    LEFT JOIN MonitorData.Connection  AS t1 ON subquery.SessionKey = t1.SessionKey\n    LEFT JOIN [MonitorData].[User] AS t2 ON subquery.UserId = t2.ID;",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Connected Sessions Detail",
+  "uid": "aadf1398-fe52-4982-a347-1504be9aa483",
+  "version": 48,
+  "weekStart": ""
+}
