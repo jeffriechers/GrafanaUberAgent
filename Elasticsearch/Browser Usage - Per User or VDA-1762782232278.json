@@ -1,0 +1,527 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_ELASTICSEARCH",
+      "label": "elasticsearch",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "version": "1.0.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "TabHost",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "ProcUser",
+              "id": "1",
+              "type": "cardinality"
+            }
+          ],
+          "query": "host:$Computername AND ProcUser:$UserName",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "User Count accessing Websites (Top 10)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "dark-blue",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 12,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "TabHost",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "host",
+              "id": "1",
+              "type": "cardinality"
+            }
+          ],
+          "query": "host:$Computername AND ProcUser:$UserName",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "VDA Count accessing Websites (Top 10)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. page load duration (ms)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 23,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "TabHost",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "100"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "PageLoadTotalDurationMs",
+              "id": "1",
+              "type": "avg"
+            },
+            {
+              "id": "3",
+              "type": "count"
+            },
+            {
+              "field": "PageLoadTotalDurationMs",
+              "id": "4",
+              "type": "cardinality"
+            },
+            {
+              "field": "host",
+              "id": "5",
+              "type": "cardinality"
+            },
+            {
+              "field": "ProcUser",
+              "id": "6",
+              "type": "cardinality"
+            },
+            {
+              "field": "PageLoadRenderDurationMs",
+              "id": "7",
+              "type": "avg"
+            },
+            {
+              "field": "PageLoadNetworkDurationMs",
+              "id": "8",
+              "type": "avg"
+            }
+          ],
+          "query": "host:$Computername AND ProcUser:$UserName",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Website Usage (Top 100)",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Unique Count BrowserName": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Average PageLoadNetworkDurationMs": 3,
+              "Average PageLoadRenderDurationMs": 2,
+              "Average PageLoadTotalDurationMs": 1,
+              "Count": 4,
+              "TabHost": 0,
+              "Unique Count PageLoadTotalDurationMs": 5,
+              "Unique Count ProcUser": 7,
+              "Unique Count host": 6
+            },
+            "renameByName": {
+              "Average": "Avg. page load duration (ms)",
+              "Average PageLoadNetworkDurationMs": "Avg. Page Load Network (ms)",
+              "Average PageLoadRenderDurationMs": "Avg. Page Load Render (ms)",
+              "Average PageLoadTotalDurationMs": "Avg. Page Load Total (ms)",
+              "Average SessionCPUUsagePercent": "Avg. CPU (%)",
+              "Average SessionIOLatencyMs": "Avg. IOPs",
+              "Average SessionIOMB": "Avg. IO Volume",
+              "Average SessionNetKBPS": "Avg. Network (KB/s)",
+              "Average SessionProcessCount": "Avg. #Processes",
+              "Average SessionWorkingSetMB": "Avg. RAM (MB)",
+              "Count": "#Page Loads",
+              "SessionID": "Session ID#",
+              "SessionLogonTime": "Logon time",
+              "SessionProtocol": "Protocol",
+              "SessionUser": "User",
+              "Sum": "Avg. IO latency (ms)",
+              "TabHost": "URL",
+              "Unique Count BrowserName": "",
+              "Unique Count PageLoadTotalDurationMs": "#Page Launches",
+              "Unique Count ProcUser": "#Users",
+              "Unique Count host": "#VDAs",
+              "host": "VDA Name"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_ELASTICSEARCH}"
+        },
+        "definition": "{\"find\": \"terms\", \"field\": \"host\", \"size\": 10000}",
+        "includeAll": true,
+        "label": "ComputerName",
+        "name": "Computername",
+        "options": [],
+        "query": "{\"find\": \"terms\", \"field\": \"host\", \"size\": 10000}",
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_ELASTICSEARCH}"
+        },
+        "definition": "{\n  \"find\": \"terms\",\n  \"field\": \"SessionUser\",\n  \"query\": \"-SessionUser:sys AND -SessionUser:root\",\n  \"size\": 10000\n}",
+        "includeAll": true,
+        "label": "UserName",
+        "name": "UserName",
+        "options": [],
+        "query": "{\n  \"find\": \"terms\",\n  \"field\": \"SessionUser\",\n  \"query\": \"-SessionUser:sys AND -SessionUser:root\",\n  \"size\": 10000\n}",
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "baseFilters": [],
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "betb8gk0ekwlca"
+        },
+        "filters": [],
+        "label": "Custom Filter",
+        "name": "CustomFilter",
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Browser Usage - Per User or VDA",
+  "uid": "db50add1-be3b-4dad-a3af-d8e8011f4e1b",
+  "version": 33,
+  "weekStart": ""
+}
