@@ -1,6 +1,8 @@
 ## Downloads
 1. Get the latest version of Elasticsearch for Windows.  https://www.elastic.co/downloads/elasticsearch
 2. Get the latest version of Grafana for Windows. https://grafana.com/grafana/download?platform=windows
+3. Get the latest uberagent config files for local and central management.  https://github.com/vastlimits/uberAgent-config
+
 
 
 ## Install Process
