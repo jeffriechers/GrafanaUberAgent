@@ -1,0 +1,571 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_WINLOGBEAT",
+      "label": "winlogbeat",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "version": "1.0.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_WINLOGBEAT}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "winlog.user.name"
+            },
+            "properties": [
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "event.created"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "winlog.event_data.LogonProcessName"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 130
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "event.module"
+          }
+        ]
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_WINLOGBEAT}"
+          },
+          "metrics": [
+            {
+              "id": "1",
+              "settings": {
+                "limit": "500"
+              },
+              "type": "logs"
+            }
+          ],
+          "query": "host.hostname:$hostname AND log.level:$LogLevel AND winlog.channel:$winlogchannel AND event.code:$EventID",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Winlogbeat",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "@timestamp": true,
+              "_id": true,
+              "_index": true,
+              "_source": true,
+              "_type": true,
+              "agent.ephemeral_id": true,
+              "agent.id": true,
+              "agent.type": true,
+              "agent.version": true,
+              "ecs.version": true,
+              "event.action": true,
+              "event.category": true,
+              "event.ingested": true,
+              "event.kind": true,
+              "event.module": true,
+              "event.outcome": true,
+              "event.provider": true,
+              "event.type": true,
+              "group.domain": true,
+              "group.id": true,
+              "group.name": true,
+              "highlight": true,
+              "host.architecture": true,
+              "host.hostname": true,
+              "host.id": true,
+              "host.mac": true,
+              "host.name": true,
+              "host.os.build": true,
+              "host.os.family": true,
+              "host.os.kernel": true,
+              "host.os.platform": true,
+              "host.os.type": true,
+              "host.os.version": true,
+              "id": true,
+              "process.name": true,
+              "process.pid": true,
+              "related.ip": true,
+              "related.user": true,
+              "sort": true,
+              "source.domain": true,
+              "source.ip": true,
+              "source.port": true,
+              "user.domain": true,
+              "user.effective.domain": true,
+              "user.effective.name": true,
+              "user.id": true,
+              "user.name": true,
+              "winlog.activity_id": true,
+              "winlog.computer_name": true,
+              "winlog.event_data.AlgorithmName": true,
+              "winlog.event_data.AuthenticationPackageName": true,
+              "winlog.event_data.Binary": true,
+              "winlog.event_data.CallerProcessId": true,
+              "winlog.event_data.CallerProcessName": true,
+              "winlog.event_data.ClientCreationTime": true,
+              "winlog.event_data.ClientProcessId": true,
+              "winlog.event_data.ClientRealm": true,
+              "winlog.event_data.CountOfCredentialsReturned": true,
+              "winlog.event_data.DCName": true,
+              "winlog.event_data.ElevatedToken": true,
+              "winlog.event_data.ErrorCode": true,
+              "winlog.event_data.ErrorMessage": true,
+              "winlog.event_data.File": true,
+              "winlog.event_data.ImpersonationLevel": true,
+              "winlog.event_data.IpAddress": true,
+              "winlog.event_data.IpPort": true,
+              "winlog.event_data.KeyFilePath": true,
+              "winlog.event_data.KeyLength": true,
+              "winlog.event_data.KeyName": true,
+              "winlog.event_data.KeyType": true,
+              "winlog.event_data.Line": true,
+              "winlog.event_data.LmPackageName": true,
+              "winlog.event_data.LogonGuid": true,
+              "winlog.event_data.LogonProcessName": true,
+              "winlog.event_data.LogonType": true,
+              "winlog.event_data.NumberOfGroupPolicyObjects": true,
+              "winlog.event_data.Operation": true,
+              "winlog.event_data.PrivilegeList": true,
+              "winlog.event_data.ProcessCreationTime": true,
+              "winlog.event_data.ProcessingMode": true,
+              "winlog.event_data.ProcessingTimeInMilliseconds": true,
+              "winlog.event_data.ProviderName": true,
+              "winlog.event_data.ReadOperation": true,
+              "winlog.event_data.RemoteCredentialGuard": true,
+              "winlog.event_data.RestrictedAdminMode": true,
+              "winlog.event_data.ReturnCode": true,
+              "winlog.event_data.Server": true,
+              "winlog.event_data.ServerName": true,
+              "winlog.event_data.ServerRealm": true,
+              "winlog.event_data.ServerTime": true,
+              "winlog.event_data.SubjectDomainName": true,
+              "winlog.event_data.SubjectLogonId": true,
+              "winlog.event_data.SubjectUserName": true,
+              "winlog.event_data.SubjectUserSid": true,
+              "winlog.event_data.SupportInfo1": true,
+              "winlog.event_data.SupportInfo2": true,
+              "winlog.event_data.TargetDomainName": true,
+              "winlog.event_data.TargetInfo": true,
+              "winlog.event_data.TargetLinkedLogonId": true,
+              "winlog.event_data.TargetLogonGuid": true,
+              "winlog.event_data.TargetLogonId": true,
+              "winlog.event_data.TargetName": true,
+              "winlog.event_data.TargetOutboundDomainName": true,
+              "winlog.event_data.TargetOutboundUserName": true,
+              "winlog.event_data.TargetRealm": true,
+              "winlog.event_data.TargetServerName": true,
+              "winlog.event_data.TargetSid": true,
+              "winlog.event_data.TargetUserName": true,
+              "winlog.event_data.TargetUserSid": true,
+              "winlog.event_data.Targetname": true,
+              "winlog.event_data.TransmittedServices": true,
+              "winlog.event_data.Type": true,
+              "winlog.event_data.VirtualAccount": true,
+              "winlog.event_data.param1": true,
+              "winlog.event_data.param2": true,
+              "winlog.event_data.param3": true,
+              "winlog.event_data.param4": true,
+              "winlog.event_id": true,
+              "winlog.keywords": true,
+              "winlog.logon.id": true,
+              "winlog.logon.type": true,
+              "winlog.opcode": true,
+              "winlog.process.pid": true,
+              "winlog.process.thread.id": true,
+              "winlog.provider_guid": true,
+              "winlog.record_id": true,
+              "winlog.task": true,
+              "winlog.user.domain": true,
+              "winlog.user.identifier": true,
+              "winlog.user.type": true,
+              "winlog.version": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "@timestamp": 14,
+              "_id": 15,
+              "_index": 16,
+              "_source": 17,
+              "_type": 18,
+              "agent.ephemeral_id": 19,
+              "agent.id": 20,
+              "agent.name": 1,
+              "agent.type": 21,
+              "agent.version": 22,
+              "ecs.version": 23,
+              "event.action": 7,
+              "event.category": 24,
+              "event.code": 4,
+              "event.created": 0,
+              "event.ingested": 25,
+              "event.kind": 26,
+              "event.module": 5,
+              "event.outcome": 6,
+              "event.provider": 8,
+              "event.type": 27,
+              "group.domain": 93,
+              "group.id": 94,
+              "group.name": 95,
+              "highlight": 28,
+              "host.architecture": 29,
+              "host.hostname": 30,
+              "host.id": 31,
+              "host.ip": 2,
+              "host.mac": 32,
+              "host.name": 33,
+              "host.os.build": 34,
+              "host.os.family": 35,
+              "host.os.kernel": 36,
+              "host.os.name": 13,
+              "host.os.platform": 37,
+              "host.os.type": 38,
+              "host.os.version": 39,
+              "id": 40,
+              "log.level": 9,
+              "message": 10,
+              "process.executable": 11,
+              "process.name": 41,
+              "process.pid": 42,
+              "related.ip": 96,
+              "related.user": 141,
+              "sort": 43,
+              "source.domain": 44,
+              "source.ip": 97,
+              "source.port": 98,
+              "user.domain": 45,
+              "user.effective.domain": 46,
+              "user.effective.name": 47,
+              "user.id": 48,
+              "user.name": 49,
+              "winlog.activity_id": 50,
+              "winlog.channel": 12,
+              "winlog.computer_name": 51,
+              "winlog.event_data.AlgorithmName": 99,
+              "winlog.event_data.AuthenticationPackageName": 52,
+              "winlog.event_data.Binary": 100,
+              "winlog.event_data.CallerProcessId": 101,
+              "winlog.event_data.CallerProcessName": 102,
+              "winlog.event_data.ClientCreationTime": 103,
+              "winlog.event_data.ClientProcessId": 104,
+              "winlog.event_data.ClientRealm": 105,
+              "winlog.event_data.CountOfCredentialsReturned": 106,
+              "winlog.event_data.DCName": 107,
+              "winlog.event_data.ElevatedToken": 53,
+              "winlog.event_data.ErrorCode": 108,
+              "winlog.event_data.ErrorMessage": 109,
+              "winlog.event_data.File": 110,
+              "winlog.event_data.ImpersonationLevel": 54,
+              "winlog.event_data.IpAddress": 55,
+              "winlog.event_data.IpPort": 56,
+              "winlog.event_data.KeyFilePath": 111,
+              "winlog.event_data.KeyLength": 57,
+              "winlog.event_data.KeyName": 112,
+              "winlog.event_data.KeyType": 113,
+              "winlog.event_data.Line": 114,
+              "winlog.event_data.LmPackageName": 58,
+              "winlog.event_data.LogonGuid": 59,
+              "winlog.event_data.LogonProcessName": 60,
+              "winlog.event_data.LogonType": 61,
+              "winlog.event_data.NumberOfGroupPolicyObjects": 115,
+              "winlog.event_data.Operation": 116,
+              "winlog.event_data.PrivilegeList": 62,
+              "winlog.event_data.ProcessCreationTime": 117,
+              "winlog.event_data.ProcessingMode": 118,
+              "winlog.event_data.ProcessingTimeInMilliseconds": 119,
+              "winlog.event_data.ProviderName": 120,
+              "winlog.event_data.ReadOperation": 121,
+              "winlog.event_data.RemoteCredentialGuard": 63,
+              "winlog.event_data.RestrictedAdminMode": 64,
+              "winlog.event_data.ReturnCode": 122,
+              "winlog.event_data.Server": 123,
+              "winlog.event_data.ServerName": 124,
+              "winlog.event_data.ServerRealm": 125,
+              "winlog.event_data.ServerTime": 126,
+              "winlog.event_data.SubjectDomainName": 65,
+              "winlog.event_data.SubjectLogonId": 66,
+              "winlog.event_data.SubjectUserName": 67,
+              "winlog.event_data.SubjectUserSid": 68,
+              "winlog.event_data.SupportInfo1": 127,
+              "winlog.event_data.SupportInfo2": 128,
+              "winlog.event_data.TargetDomainName": 69,
+              "winlog.event_data.TargetInfo": 70,
+              "winlog.event_data.TargetLinkedLogonId": 71,
+              "winlog.event_data.TargetLogonGuid": 72,
+              "winlog.event_data.TargetLogonId": 73,
+              "winlog.event_data.TargetName": 129,
+              "winlog.event_data.TargetOutboundDomainName": 74,
+              "winlog.event_data.TargetOutboundUserName": 75,
+              "winlog.event_data.TargetRealm": 130,
+              "winlog.event_data.TargetServerName": 76,
+              "winlog.event_data.TargetSid": 131,
+              "winlog.event_data.TargetUserName": 77,
+              "winlog.event_data.TargetUserSid": 78,
+              "winlog.event_data.Targetname": 132,
+              "winlog.event_data.TransmittedServices": 79,
+              "winlog.event_data.Type": 133,
+              "winlog.event_data.VirtualAccount": 80,
+              "winlog.event_data.param1": 134,
+              "winlog.event_data.param2": 135,
+              "winlog.event_data.param3": 136,
+              "winlog.event_data.param4": 137,
+              "winlog.event_id": 81,
+              "winlog.keywords": 82,
+              "winlog.logon.id": 83,
+              "winlog.logon.type": 84,
+              "winlog.opcode": 85,
+              "winlog.process.pid": 86,
+              "winlog.process.thread.id": 87,
+              "winlog.provider_guid": 88,
+              "winlog.provider_name": 89,
+              "winlog.record_id": 90,
+              "winlog.task": 91,
+              "winlog.user.domain": 138,
+              "winlog.user.identifier": 139,
+              "winlog.user.name": 3,
+              "winlog.user.type": 140,
+              "winlog.version": 92
+            },
+            "renameByName": {
+              "agent.name": "Computer Name",
+              "event.code": "Event ID",
+              "event.created": "Event time",
+              "host.ip": "Computer IP",
+              "host.os.name": "Computer OS",
+              "log.level": "Log Level",
+              "message": "Event Message",
+              "process.executable": "Process Exeecuted",
+              "winlog.channel": "Event Log",
+              "winlog.provider_name": "Log Provider",
+              "winlog.user.name": "Username",
+              "winlog.user.type": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_WINLOGBEAT}"
+        },
+        "definition": "{\n  \"find\": \"terms\",\n  \"field\": \"host.hostname\",\n  \"size\": 10000\n}",
+        "includeAll": true,
+        "label": "ComputerName",
+        "name": "hostname",
+        "options": [],
+        "query": "{\n  \"find\": \"terms\",\n  \"field\": \"host.hostname\",\n  \"size\": 10000\n}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_WINLOGBEAT}"
+        },
+        "definition": "{\n  \"find\": \"terms\",\n  \"field\": \"log.level\",\n  \"size\": 10000\n}",
+        "includeAll": true,
+        "name": "LogLevel",
+        "options": [],
+        "query": "{\n  \"find\": \"terms\",\n  \"field\": \"log.level\",\n  \"size\": 10000\n}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_WINLOGBEAT}"
+        },
+        "definition": "{\n  \"find\": \"terms\",\n  \"field\": \"winlog.channel\",\n  \"size\": 10000\n}",
+        "includeAll": true,
+        "label": "Windows Log Type",
+        "name": "winlogchannel",
+        "options": [],
+        "query": "{\n  \"find\": \"terms\",\n  \"field\": \"winlog.channel\",\n  \"size\": 10000\n}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": "*",
+        "allowCustomValue": false,
+        "current": {},
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${DS_WINLOGBEAT}"
+        },
+        "definition": "{\n  \"find\": \"terms\",\n  \"field\": \"event.code\",\n  \"size\": 10000\n}",
+        "includeAll": true,
+        "name": "EventID",
+        "options": [],
+        "query": "{\n  \"find\": \"terms\",\n  \"field\": \"event.code\",\n  \"size\": 10000\n}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "baseFilters": [],
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "bf3psorao3rwgc"
+        },
+        "description": "Custom search",
+        "filters": [],
+        "label": "Search",
+        "name": "User",
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Windows Event Logs",
+  "uid": "eeb227c6-5f38-4f57-aefd-47b25721a7df",
+  "version": 63,
+  "weekStart": ""
+}
