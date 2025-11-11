@@ -9,7 +9,7 @@ I will contine to add Dashboards to this console, and will add Azure Data locati
 ### UPDATES
 
 11-11-2025
-I have built a Windows Event Log Dashboard around the winlogbeat agent for Elasticsearch to consolidate all your event logs into an easily sortable, searchable table.
+I have built a Windows Event Log Dashboard around the winlogbeat agent for Elasticsearch to consolidate all your event logs into an easily sortable, searchable table. [Read More Here](./WinLogBeat_Install.md)
 
 11-10-2025
 I added a Browser Usage and Browser Performance Dashboard to the Elasticsearch section.  These require the UberAgent browser plug-in to be deployed to the VDA.  Right now they detect Windows machines, but will be adding MACOS detection as well soon.
