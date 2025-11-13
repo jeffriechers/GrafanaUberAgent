@@ -308,7 +308,20 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Publisher"
+            },
+            "properties": [
+              {
+                "id": "filterable",
+                "value": true
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 18,
@@ -742,13 +755,13 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Application Details",
   "uid": "e3dd2994-dc83-4cd7-8a9a-801cce26f57f",
-  "version": 47,
+  "version": 49,
   "weekStart": ""
 }
