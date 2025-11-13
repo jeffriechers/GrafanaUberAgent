@@ -73,6 +73,7 @@
             "cellOptions": {
               "type": "auto"
             },
+            "filterable": true,
             "inspect": false
           },
           "mappings": [],
@@ -97,6 +98,30 @@
                 "value": "ms"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VDA Name"
+            },
+            "properties": [
+              {
+                "id": "filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "URL"
+            },
+            "properties": [
+              {
+                "id": "filterable",
+                "value": true
+              }
+            ]
           }
         ]
       },
@@ -111,6 +136,7 @@
         "cellHeight": "sm",
         "footer": {
           "countRows": false,
+          "enablePagination": true,
           "fields": "",
           "reducer": [
             "sum"
@@ -137,7 +163,7 @@
                 "min_doc_count": "1",
                 "order": "desc",
                 "orderBy": "_term",
-                "size": "100"
+                "size": "10000"
               },
               "type": "terms"
             },
@@ -148,7 +174,7 @@
                 "min_doc_count": "1",
                 "order": "desc",
                 "orderBy": "_term",
-                "size": "10"
+                "size": "10000"
               },
               "type": "terms"
             },
@@ -159,7 +185,7 @@
                 "min_doc_count": "1",
                 "order": "desc",
                 "orderBy": "_term",
-                "size": "10"
+                "size": "10000"
               },
               "type": "terms"
             }
@@ -876,13 +902,13 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Browser Performance Metrics - Per User or VDA",
   "uid": "77b85ed6-2b22-4fb2-b332-fe292e9cba6d",
-  "version": 38,
+  "version": 42,
   "weekStart": ""
 }

@@ -333,6 +333,7 @@
             "cellOptions": {
               "type": "auto"
             },
+            "filterable": true,
             "inspect": false
           },
           "mappings": [],
@@ -438,42 +439,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Enabled (first)"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "State"
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "0": {
-                        "index": 0,
-                        "text": "Disabled"
-                      },
-                      "1": {
-                        "index": 1,
-                        "text": "Enabled"
-                      }
-                    },
-                    "type": "value"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Published Desktop"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 146
+                "value": 196
               }
             ]
           },
@@ -485,7 +456,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 167
+                "value": 203
               }
             ]
           },
@@ -552,16 +523,17 @@
         ]
       },
       "gridPos": {
-        "h": 12,
+        "h": 15,
         "w": 24,
         "x": 0,
         "y": 5
       },
-      "id": 1,
+      "id": 3,
       "options": {
         "cellHeight": "sm",
         "footer": {
           "countRows": false,
+          "enablePagination": true,
           "fields": "",
           "reducer": [
             "sum"
@@ -637,17 +609,6 @@
                 "size": "10"
               },
               "type": "terms"
-            },
-            {
-              "field": "Enabled",
-              "id": "7",
-              "settings": {
-                "min_doc_count": "0",
-                "order": "desc",
-                "orderBy": "1",
-                "size": "10"
-              },
-              "type": "terms"
             }
           ],
           "datasource": {
@@ -662,7 +623,7 @@
               "type": "cardinality"
             }
           ],
-          "query": "",
+          "query": "Sourcetype:*",
           "refId": "A",
           "timeField": "@timestamp"
         }
@@ -747,13 +708,13 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Published Resources",
   "uid": "4854c9e1-d7ea-4677-8185-b164140fd84d",
-  "version": 32,
+  "version": 37,
   "weekStart": ""
 }
