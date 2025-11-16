@@ -1,0 +1,468 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_ELASTICSEARCH",
+      "label": "elasticsearch",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "elasticsearch",
+      "pluginName": "Elasticsearch"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "elasticsearch",
+      "name": "Elasticsearch",
+      "version": "1.0.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "12.0.2"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AppId"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AppName"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 245
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Count"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total CPU time (s)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. CPU (%)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. RAM (MB)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average IO Read (MB)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 196
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. IOPS Write"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average IO Write (MB)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 191
+              },
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. IOPS Read"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. Network Latency"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg. Network Throughput"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "KBs"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Avg. IOPS Write"
+          }
+        ]
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "AppId",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "100000"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "ProcCPUTimeMs",
+              "id": "1",
+              "type": "sum"
+            },
+            {
+              "field": "ProcCPUPercent",
+              "id": "3",
+              "type": "avg"
+            },
+            {
+              "field": "ProcIOPSRead",
+              "id": "4",
+              "type": "avg"
+            },
+            {
+              "field": "ProcIOPSWrite",
+              "id": "5",
+              "type": "avg"
+            },
+            {
+              "field": "ProcIOReadMB",
+              "id": "6",
+              "type": "sum"
+            },
+            {
+              "field": "ProcIOReadMB",
+              "id": "7",
+              "type": "avg"
+            },
+            {
+              "field": "ProcWorkingSetMB",
+              "id": "8",
+              "type": "avg"
+            },
+            {
+              "field": "NetTargetSendLatencyInitialMs",
+              "id": "9",
+              "type": "avg"
+            },
+            {
+              "field": "ProcNetKBPS",
+              "id": "10",
+              "type": "avg"
+            },
+            {
+              "field": "ProcIOWriteMB",
+              "id": "11",
+              "type": "sum"
+            },
+            {
+              "field": "ProcIOWriteMB",
+              "id": "12",
+              "type": "avg"
+            }
+          ],
+          "query": "",
+          "refId": "A",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "AppId",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "100000"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "AppName",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "100000"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "Sourcetype: \"uberAgent:Application:AppNameIdMapping\"",
+          "refId": "B",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Application Performance",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:A|B)$/"
+          },
+          "id": "joinByField",
+          "options": {
+            "byField": "AppId",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "AppId": 1,
+              "AppName": 0,
+              "Average NetTargetSendLatencyInitialMs": 11,
+              "Average ProcCPUPercent": 3,
+              "Average ProcIOPSRead": 4,
+              "Average ProcIOPSWrite": 5,
+              "Average ProcIOReadMB": 8,
+              "Average ProcIOWriteMB": 9,
+              "Average ProcNetKBPS": 12,
+              "Average ProcWorkingSetMB": 10,
+              "Count": 13,
+              "Sum ProcCPUTimeMs": 2,
+              "Sum ProcIOReadMB": 6,
+              "Sum ProcIOWriteMB": 7
+            },
+            "renameByName": {
+              "AppName": "Application Name",
+              "Average NetTargetSendLatencyInitialMs": "Avg. Network Latency",
+              "Average ProcCPUPercent": "Avg. CPU (%)",
+              "Average ProcIOPSRead": "Avg. IOPS Read",
+              "Average ProcIOPSWrite": "Avg. IOPS Write",
+              "Average ProcIOReadMB": "Average IO Read (MB)",
+              "Average ProcIOWriteMB": "Average IO Write (MB)",
+              "Average ProcNetKBPS": "Avg. Network Throughput",
+              "Average ProcWorkingSetMB": "Avg. RAM (MB)",
+              "Sum ProcCPUTimeMs": "Total CPU time (s)",
+              "Sum ProcIOReadMB": "Total IO Read",
+              "Sum ProcIOWriteMB": "Total IO Write"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "baseFilters": [],
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "betb8gk0ekwlca"
+        },
+        "filters": [],
+        "name": "Filters",
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Process Application Performance",
+  "uid": "e42209f4-72ae-4da2-b524-b6f0d472895d",
+  "version": 32,
+  "weekStart": ""
+}

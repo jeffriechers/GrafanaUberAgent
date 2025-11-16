@@ -7,6 +7,8 @@ Import the Grafana Dashboards under MSSQL and Elasticsearch and point them to Da
 I will contine to add Dashboards to this console, and will add Azure Data locations in the future as well.
 
 ### UPDATES
+11-16-2025
+More Consoles have been built dealing with Errors, Networking, and Processes.  Building consoles similar to the Splunk Consoles that don't have corresponding data available in Director.
 
 11-11-2025
 I have built a Windows Event Log Dashboard around the winlogbeat agent for Elasticsearch to consolidate all your event logs into an easily sortable, searchable table. [Read More Here](./WinLogBeat_Install.md)

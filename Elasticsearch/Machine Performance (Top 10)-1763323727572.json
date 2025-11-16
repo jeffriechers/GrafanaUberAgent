@@ -66,7 +66,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-orange",
+            "mode": "fixed"
           },
           "custom": {
             "axisBorderShow": false,
@@ -95,14 +96,6 @@
             "steps": [
               {
                 "color": "green"
-              },
-              {
-                "color": "yellow",
-                "value": 75
-              },
-              {
-                "color": "red",
-                "value": 95
               }
             ]
           }
@@ -110,22 +103,22 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 10,
+        "h": 9,
+        "w": 6,
         "x": 0,
         "y": 0
       },
       "id": 1,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.97,
+        "barWidth": 1,
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "orientation": "horizontal",
         "showValue": "auto",
@@ -144,7 +137,7 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "ProcName",
+              "field": "host",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -161,17 +154,17 @@
           },
           "metrics": [
             {
-              "field": "ProcCPUPercent",
+              "field": "CPUUsagePercent",
               "id": "1",
               "type": "avg"
             }
           ],
-          "query": "host:$Computername",
+          "query": "",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "CPU per process",
+      "title": "Avg CPU Usage per Machine",
       "type": "barchart"
     },
     {
@@ -182,7 +175,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-yellow",
+            "mode": "fixed"
           },
           "custom": {
             "axisBorderShow": false,
@@ -213,14 +207,15 @@
                 "color": "green"
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 10,
-        "x": 10,
+        "h": 9,
+        "w": 6,
+        "x": 6,
         "y": 0
       },
       "id": 2,
@@ -233,7 +228,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "orientation": "horizontal",
         "showValue": "auto",
@@ -252,7 +247,7 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "ProcName",
+              "field": "host",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -269,18 +264,17 @@
           },
           "metrics": [
             {
-              "field": "ProcWorkingSetMB",
+              "field": "RAMUsagePercent",
               "id": "1",
-              "settings": {},
               "type": "avg"
             }
           ],
-          "query": "host:$Computername",
+          "query": "",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "RAM per process",
+      "title": "Avg RAM Usage per Machine (%)",
       "type": "barchart"
     },
     {
@@ -291,7 +285,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-green",
+            "mode": "fixed"
           },
           "custom": {
             "axisBorderShow": false,
@@ -322,15 +317,16 @@
                 "color": "green"
               }
             ]
-          }
+          },
+          "unit": "decgbytes"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 10,
-        "x": 0,
-        "y": 10
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 0
       },
       "id": 3,
       "options": {
@@ -342,7 +338,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "orientation": "horizontal",
         "showValue": "auto",
@@ -361,7 +357,7 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "ProcName",
+              "field": "host",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
@@ -378,17 +374,17 @@
           },
           "metrics": [
             {
-              "field": "ProcIOReadCount",
+              "field": "RAMUsageGB",
               "id": "1",
               "type": "avg"
             }
           ],
-          "query": "host:$Computername",
+          "query": "",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "IO per process",
+      "title": "RAM Usage per Machine (GB)",
       "type": "barchart"
     },
     {
@@ -399,7 +395,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-purple",
+            "mode": "fixed"
           },
           "custom": {
             "axisBorderShow": false,
@@ -430,17 +427,238 @@
                 "color": "green"
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 10,
-        "x": 10,
-        "y": 10
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 0
       },
       "id": 4,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "host",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "NetUtilizationPercent",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Avg Network Usage per Machine (%)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 9
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "host",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${DS_ELASTICSEARCH}"
+          },
+          "metrics": [
+            {
+              "field": "IOPercentDiskTime",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Avg Disk IO per Machine (%)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${DS_ELASTICSEARCH}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "palette-classic-by-name"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "decmbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 9
+      },
+      "id": 7,
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
@@ -469,12 +687,12 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "ProcName",
+              "field": "host",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
                 "order": "desc",
-                "orderBy": "1",
+                "orderBy": "3",
                 "size": "10"
               },
               "type": "terms"
@@ -486,17 +704,22 @@
           },
           "metrics": [
             {
-              "field": "ProcNetKBPS",
+              "field": "MemorySharedMB",
               "id": "1",
+              "type": "avg"
+            },
+            {
+              "field": "MemoryDedicatedMB",
+              "id": "3",
               "type": "avg"
             }
           ],
-          "query": "host:$Computername",
+          "query": "",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "Network (KB) per process",
+      "title": "Avg GPU Memory Usage (MB)",
       "type": "barchart"
     },
     {
@@ -507,7 +730,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed"
           },
           "custom": {
             "align": "left",
@@ -531,132 +754,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "ProcName"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Process Name"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sum ProcCPUTimeMs"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Total CPU time"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average ProcCPUPercent"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. CPU (%)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average ProcIOReadCount"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. IOPS"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sum ProcIOReadCount"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Total IO (count)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average ProcIOReadMB"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. IO (MB/s)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sum ProcIOReadMB"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Total IO (MB)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average ProcWorkingSetMB"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. RAM (MB)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average ProcNetKBPS"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. net throughput (KB/s)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Average NetTargetSendLatencyMs"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Avg. net latency (ms)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total CPU time"
+              "options": "Avg. IOPS"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 165
+                "value": 110
               }
             ]
           },
@@ -668,103 +771,19 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 153
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg. IOPS"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 82
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total IO (count)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 146
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg. IO (MB/s)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 132
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total IO (MB)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 127
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg. RAM (MB)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 139
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg. net throughput (KB/s)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 221
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Process Name"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 301
+                "value": 130
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 47,
-        "w": 22,
+        "h": 13,
+        "w": 24,
         "x": 0,
-        "y": 20
+        "y": 18
       },
-      "id": 5,
+      "id": 6,
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -777,12 +796,7 @@
           "show": false
         },
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Total CPU time"
-          }
-        ]
+        "sortBy": []
       },
       "pluginVersion": "12.0.2",
       "targets": [
@@ -790,12 +804,13 @@
           "alias": "",
           "bucketAggs": [
             {
-              "field": "ProcName",
+              "field": "host",
               "id": "2",
               "settings": {
                 "min_doc_count": "1",
-                "order": "asc",
-                "orderBy": "_term"
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
               },
               "type": "terms"
             }
@@ -806,92 +821,113 @@
           },
           "metrics": [
             {
-              "field": "ProcCPUTimeMs",
+              "field": "CPUUsagePercent",
               "id": "1",
-              "type": "sum"
+              "type": "avg"
             },
             {
-              "field": "ProcCPUPercent",
+              "field": "IOPS",
               "id": "3",
               "type": "avg"
             },
             {
-              "field": "ProcIOReadCount",
+              "field": "IOPercentDiskTime",
               "id": "4",
               "type": "avg"
             },
             {
-              "field": "ProcIOReadCount",
+              "field": "IOLatencyMs",
               "id": "5",
-              "type": "sum"
+              "type": "avg"
             },
             {
-              "field": "ProcIOReadMB",
+              "field": "RAMUsageGB",
               "id": "6",
               "type": "avg"
             },
             {
-              "field": "ProcIOReadMB",
+              "field": "RAMUsagePercent",
               "id": "7",
-              "type": "sum"
+              "type": "avg"
             },
             {
-              "field": "ProcWorkingSetMB",
+              "field": "NetUtilizationPercent",
               "id": "8",
               "type": "avg"
             },
             {
-              "field": "ProcNetKBPS",
+              "field": "KernelPagedMB",
               "id": "9",
               "type": "avg"
             },
             {
-              "field": "NetTargetSendLatencyMs",
+              "field": "KernelNonPagedMB",
               "id": "10",
+              "type": "avg"
+            },
+            {
+              "field": "HandleCount",
+              "id": "11",
+              "type": "avg"
+            },
+            {
+              "field": "ThreadCount",
+              "id": "12",
+              "type": "avg"
+            },
+            {
+              "field": "CPURelativeFrequencyPercent",
+              "id": "13",
               "type": "avg"
             }
           ],
-          "query": "host:$Computername  ",
+          "query": "",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "Process List",
+      "title": "Machine Performance",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Average CPURelativeFrequencyPercent": "Avg. CPU Relative Frequency",
+              "Average CPUUsagePercent": "Avg. CPU (%)",
+              "Average HandleCount": "Avg. Handles",
+              "Average IOLatencyMs": "Avg. IO latency (ms)",
+              "Average IOPS": "Avg. IOPS",
+              "Average IOPercentDiskTime": "Avg. Disk time (%)",
+              "Average KernelNonPagedMB": "Avg. NonPaged Pool (MB)",
+              "Average KernelPagedMB": "Avg. Paged Pool (MB)",
+              "Average NetUtilizationPercent": "Avg. Network (%)",
+              "Average RAMUsageGB": "Avg. RAM (GB)",
+              "Average RAMUsagePercent": "Avg. RAM (%)",
+              "Average ThreadCount": "Avg. Threads",
+              "host": "ComputerName"
+            }
+          }
+        }
+      ],
       "type": "table"
     }
   ],
   "schemaVersion": 41,
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "allowCustomValue": false,
-        "current": {},
-        "datasource": {
-          "type": "elasticsearch",
-          "uid": "${DS_ELASTICSEARCH}"
-        },
-        "definition": "{\"find\": \"terms\", \"field\": \"host\", \"size\": 10000}",
-        "includeAll": true,
-        "label": "Computer Name",
-        "name": "Computername",
-        "options": [],
-        "query": "{\"find\": \"terms\", \"field\": \"host\", \"size\": 10000}",
-        "refresh": 1,
-        "regex": "",
-        "sort": 1,
-        "type": "query"
-      }
-    ]
+    "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Process Performance",
-  "uid": "3d07d074-2c89-4ff1-b3b0-e55964266317",
-  "version": 30,
+  "title": "Machine Performance (Top 10)",
+  "uid": "a7752926-ebb3-43da-a796-b523c4683e69",
+  "version": 54,
   "weekStart": ""
 }
