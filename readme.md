@@ -75,5 +75,4 @@ I added a Browser Usage and Browser Performance Dashboard to the Elasticsearch s
 
 ### Connected Session Detail
 
-
 ![](assets/20251116_152752_image.png)
