@@ -8,7 +8,7 @@ Download the latest version of WinLogBeat from [WinLogBeat](https://www.elastic.
 
 Extract the winlogbeat folder from the downloaded zip.  Rename it to winlogbeat and place it on your server's C:\Program Files directory.
 
-Download the [winlogbeat.yml](.\winlogbeat.yml) file and modify the settings for your Elasticsearch server.  Also edit any of the Event Logs if you want to capture more or less data.
+Download the [winlogbeat.yml](./winlogbeat.yml) file and modify the settings for your Elasticsearch server.  Also edit any of the Event Logs if you want to capture more or less data.
 
 Place the modified winlogbeat.yml file into the c:\program files\winlogbeat directory, replacing the initial template.
 
