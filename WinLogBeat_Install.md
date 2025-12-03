@@ -21,3 +21,46 @@ On your Grafana Dashboard, create a new Elasticsearch Data Connection to your El
 Import the Windows Event Logs console from the Elasticsearch folder to your Grafana Console, and select the winlogbeat Data Connection you just created.
 
 If you notice the variables are not refreshing, refresh the whole page.  This is a function of Grafana where it builds those variables on reload.
+
+### Delete entries older than 30 days
+When you first have machines launch Winlogbeat they will create all the necessary indexes, templates, and lifecycle management policies.
+
+To age out records in Winlogbeat you can use the below PowerShell code to remove entries older than 30 days.
+
+```
+Add-Type @"
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+
+public class TrustAllCertsPolicy : ICertificatePolicy {
+    public bool CheckValidationResult(
+        ServicePoint srvPoint, X509Certificate certificate,
+        WebRequest request, int certificateProblem) {
+        return true;
+    }
+}
+"@
+
+[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+$cred = Get-Credential  # Prompts for username/password
+$body = @"
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {}
+      },
+      "delete": {
+        "min_age": "30d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}
+"@
+
+Invoke-RestMethod -Uri "http://<url>:9200/_ilm/policy/winlogbeat" -Method Put -ContentType "application/json" -Body $body -Credential $cred
+```

@@ -97,3 +97,81 @@ Import the Dashboards downloaded from Github, select the elasticsearch Data Sour
 Click Import
 
 Repeat for each Dashboard you want to deploy.
+
+### Index Lifecycle Management
+
+To remove entries older than 30 days modify the url section for your elasticsearch server.
+
+```
+Add-Type @"
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+
+public class TrustAllCertsPolicy : ICertificatePolicy {
+    public bool CheckValidationResult(
+        ServicePoint srvPoint, X509Certificate certificate,
+        WebRequest request, int certificateProblem) {
+        return true;
+    }
+}
+"@
+
+[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+$cred = Get-Credential  # Prompts for username/password
+
+# Define the JSON body
+$body = @"
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {}
+      },
+      "delete": {
+        "min_age": "30d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}
+"@
+
+# Send to Elasticsearch
+Invoke-RestMethod -Uri "http://<url>:9200/_ilm/policy/delete-after-30d" -Method Put -ContentType "application/json" -Body $body -Credential $cred
+
+```
+
+To apply this policy to your uberagent database, modify and run the following powershell code.
+
+```
+Add-Type @"
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+
+public class TrustAllCertsPolicy : ICertificatePolicy {
+    public bool CheckValidationResult(
+        ServicePoint srvPoint, X509Certificate certificate,
+        WebRequest request, int certificateProblem) {
+        return true;
+    }
+}
+"@
+
+[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+$cred = Get-Credential  # Prompts for username/password
+$body = @"
+{
+  "index": {
+    "lifecycle": {
+      "name": "delete-after-30d"
+    }
+  }
+}
+"@
+
+Invoke-RestMethod -Uri "http://<url>:9200/uberagent/_settings" -Method Put -ContentType "application/json" -Body $body -Credential $cred
+```
