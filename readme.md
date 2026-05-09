@@ -1,4 +1,4 @@
-# Grafana Console for UberAgent data in Elasticsearch database
+# Grafana Consoles for UberAgent data in Azure Log Monitor and Elasticsearch database
 
 This github is a repository for Grafana consoles to gather Citrix data from MSSQL DB queries, Azure Log Monitor, and from Elasticsearch with an UberAgent index.
 
