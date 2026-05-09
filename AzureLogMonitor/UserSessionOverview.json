@@ -1,0 +1,1835 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "eed2bjb8yafpcc",
+    "generation": 8,
+    "creationTimestamp": "2026-05-04T18:10:21Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true,
+          "legacyOptions": {
+            "type": "dashboard"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "ICA Session Count",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]' \r\n| where SessionProtocol_s == \"ICA\"\r\n| summarize dcount(SessionGUID_g) by Computer ",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureMonitor": {
+                          "allowedTimeGrainsMs": [],
+                          "timeGrain": "auto"
+                        },
+                        "queryType": "Azure Monitor"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": []
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionGUID_g"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.align",
+                        "value": "auto"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-10": {
+        "kind": "Panel",
+        "spec": {
+          "id": 10,
+          "title": "Disconnected ICA Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| where SessionConnectionState_s == \"disconnected\"\r\n| where SessionProtocol_s == \"ICA\"\r\n| summarize arg_max(TimeGenerated,*) by SessionGUID_g\r\n| project Computer,SessionUser_s,SessionClientName_s,SessionClientIp_s,SessionClientVersion_s,SessionCPUUsagePercent_d,SessionWorkingSetMB_d,SessionNetKBPS_d\r\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Computer"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "VDA Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Username"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Last Endpoint Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientIp_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Last Endpoint IP"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientVersion_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Last CWA Version"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionID_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session ID#"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionCPUUsagePercent_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session CPU%"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionWorkingSetMB_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session RAM(MB)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionNetKBPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Network(KBPS)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOLatencyMs_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "IO Latency"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-11": {
+        "kind": "Panel",
+        "spec": {
+          "id": 11,
+          "title": "Disconnected ICA Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionProtocol_s == \"ICA\"\r\n| where SessionAppStateCtx_s != \"active\"\r\n| summarize dcount(SessionGUID_g)",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 5,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionGUID_g"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "ICA Unique Users",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionProtocol_s == \"ICA\"\r\n| summarize dcount(SessionUser_s)",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "ICA Unique Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionProtocol_s == \"ICA\"\r\n| summarize dcount(SessionGUID_g)",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionGUID_g"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Connected RDP and TCP Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionConnectionState_s == \"active\"\r\n| summarize [\"Sessions\"] = dcount(SessionGUID_g) by bin(TimeGenerated, [[Interval]])\r\n\r\n\r\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "axisSoftMin": 0,
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "RDP Session Count",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]' \r\n| where SessionProtocol_s == \"RDP\"\r\n| summarize dcount(SessionGUID_g) by Computer ",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureMonitor": {
+                          "allowedTimeGrainsMs": [],
+                          "timeGrain": "auto"
+                        },
+                        "queryType": "Azure Monitor"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": []
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionGUID_g"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "RDP Unique Users",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionProtocol_s == \"RDP\"\r\n| summarize dcount(SessionUser_s)",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "RDP Unique Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where SessionProtocol_s == \"RDP\"\r\n| summarize dcount(SessionGUID_g)",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": false
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dcount_SessionGUID_g"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Active ICA Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| where SessionConnectionState_s == \"active\"\r\n| where SessionProtocol_s == \"ICA\"\r\n| summarize arg_max(TimeGenerated,*) by SessionGUID_g\r\n| project Computer,SessionUser_s,SessionClientName_s,SessionClientIp_s,SessionClientVersion_s,SessionID_d,SessionCPUUsagePercent_d,SessionWorkingSetMB_d,SessionNetKBPS_d\r\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Computer"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "VDA Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Username"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Endpoint Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientIp_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Endpoint IP"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientVersion_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "CWA Version"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionID_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session ID#"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionCPUUsagePercent_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session CPU%"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionWorkingSetMB_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session RAM(MB)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionNetKBPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Network(KBPS)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOLatencyMs_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "IO Latency"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "id": 9,
+          "title": "Active and Disconnected RDP Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Session_SessionDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| where SessionConnectionState_s == \"active\"\r\n| where SessionProtocol_s == \"RDP\"\r\n| summarize arg_max(TimeGenerated,*) by SessionGUID_g\r\n| project Computer,SessionUser_s,SessionClientName_s,SessionClientIp_s,SessionClientVersion_s,SessionID_d,SessionCPUUsagePercent_d,SessionWorkingSetMB_d,SessionNetKBPS_d\r\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Computer"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "VDA Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width"
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Username"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Endpoint Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientIp_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Endpoint IP"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionClientVersion_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "RDP Client Version"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionID_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session ID#"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionCPUUsagePercent_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session CPU%"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionWorkingSetMB_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session RAM(MB)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionNetKBPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Network(KBPS)"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionIOLatencyMs_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "IO Latency"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 3,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 3,
+              "y": 0,
+              "width": 3,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 0,
+              "width": 3,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-11"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 9,
+              "y": 0,
+              "width": 3,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 0,
+              "width": 3,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 3,
+              "width": 9,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 9,
+              "y": 3,
+              "width": 6,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 10,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 16,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 22,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-10"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 28,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-9"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-24h",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "User Session Overview",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Application_ApplicationInventory_CL\r\n| distinct Computer\r\n| project Computer = strcat('\"', Computer, '\"')",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": false
+        }
+      },
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "Interval",
+          "query": "1m, 5m, 10m",
+          "current": {
+            "text": "10m",
+            "value": "10m"
+          },
+          "options": [
+            {
+              "selected": false,
+              "text": "1m",
+              "value": "1m"
+            },
+            {
+              "selected": false,
+              "text": "5m",
+              "value": "5m"
+            },
+            {
+              "selected": true,
+              "text": "10m",
+              "value": "10m"
+            }
+          ],
+          "multi": false,
+          "includeAll": false,
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "allowCustomValue": true,
+          "valuesFormat": "csv"
+        }
+      }
+    ]
+  }
+}

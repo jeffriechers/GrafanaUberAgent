@@ -1,0 +1,2858 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "smb-client-performance",
+    "generation": 33,
+    "creationTimestamp": "2026-05-06T20:20:15Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Crosshair",
+    "description": "SMB Client Performance — displays performance of SMB connections to network shares including IOPS, latency, and data volume metrics. Converted from Splunk uberAgent dashboard.",
+    "editable": true,
+    "elements": {
+      "panel-10": {
+        "kind": "Panel",
+        "spec": {
+          "id": 10,
+          "title": "IOPS over time per network share (top [[TopN]])",
+          "description": "Stacked IOPS (read+write) over time for the top [[TopN]] shares by total IOPS. Aggregation controlled by the IOPS function variable.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "let top5shares = uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| where isnotempty(SharePath_s)\n| summarize TotalIOPS = sum(IOPSRead_d + IOPSWrite_d) by SharePath_s\n| top [[TopN]] by TotalIOPS desc\n| project SharePath_s;\nuberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| where SharePath_s in (top5shares)\n| summarize\n    avg_iops = round(avg(IOPSRead_d + IOPSWrite_d), 1),\n    min_iops = round(min(IOPSRead_d + IOPSWrite_d), 1),\n    max_iops = round(max(IOPSRead_d + IOPSWrite_d), 1),\n    sum_iops = round(sum(IOPSRead_d + IOPSWrite_d), 1)\n  by bin(TimeGenerated, $__interval), SharePath_s\n| extend IOPS = iff(\"${iops_function}\" == \"min\", min_iops, iff(\"${iops_function}\" == \"max\", max_iops, avg_iops))\n| project TimeGenerated, SharePath_s, IOPS\n| order by TimeGenerated asc",
+                          "resources": [],
+                          "resultFormat": "time_series",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "prepareTimeSeries",
+                  "spec": {
+                    "options": {
+                      "format": "multi"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "renameByRegex",
+                  "spec": {
+                    "options": {
+                      "regex": "(.*)",
+                      "renamePattern": "$1"
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max"
+                  ],
+                  "displayMode": "list",
+                  "placement": "right",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "bars",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 0,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-12": {
+        "kind": "Panel",
+        "spec": {
+          "id": 12,
+          "title": "Data volume (top [[TopN]]) by Share",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    ReadVolumeMB = round(sum(IOMBRead_d), 1),\n    WriteVolumeMB = round(sum(IOMBWrite_d), 1),\n    TotalMB = round(sum(IOMBRead_d) + sum(IOMBWrite_d), 1)\n  by SharePath_s\n| top [[TopN]] by TotalMB desc\n| project SharePath_s, ReadVolumeMB, WriteVolumeMB",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.6,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "auto",
+                "stacking": "normal",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                },
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decmbytes",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-13": {
+        "kind": "Panel",
+        "spec": {
+          "id": 13,
+          "title": "Average latency (top [[TopN]]) by Share",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    SumDurRead = sum(IOLatencyMsRead_d), SumCountRead = sum(IOCountRead_d),\n    SumDurWrite = sum(IOLatencyMsWrite_d), SumCountWrite = sum(IOCountWrite_d),\n    SumDurRW = sum(IOLatencyMsRead_d) + sum(IOLatencyMsWrite_d),\n    SumCountRW = sum(IOCountRead_d) + sum(IOCountWrite_d)\n  by SharePath_s\n| extend\n    AvgReadLatencyMs = round(iff(SumCountRead > 0, SumDurRead / SumCountRead, 0.0), 1),\n    AvgWriteLatencyMs = round(iff(SumCountWrite > 0, SumDurWrite / SumCountWrite, 0.0), 1),\n    AvgRWLatencyMs = round(iff(SumCountRW > 0, SumDurRW / SumCountRW, 0.0), 1)\n| top [[TopN]] by AvgRWLatencyMs desc\n| project SharePath_s, AvgReadLatencyMs, AvgWriteLatencyMs",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.6,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "auto",
+                "stacking": "normal",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                },
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgReadLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. read latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgWriteLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. write latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-15": {
+        "kind": "Panel",
+        "spec": {
+          "id": 15,
+          "title": "Data volume over time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    ReadVolumeMB = round(sum(IOMBRead_d), 1),\n    WriteVolumeMB = round(sum(IOMBWrite_d), 1)\n  by bin(TimeGenerated, $__interval)",
+                          "resources": [],
+                          "resultFormat": "time_series",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max",
+                    "sum"
+                  ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decmbytes",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-16": {
+        "kind": "Panel",
+        "spec": {
+          "id": 16,
+          "title": "Average latency over time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    SumDurRead = sum(IOLatencyMsRead_d), SumCountRead = sum(IOCountRead_d),\n    SumDurWrite = sum(IOLatencyMsWrite_d), SumCountWrite = sum(IOCountWrite_d)\n  by bin(TimeGenerated, $__interval)\n| extend\n    AvgReadLatencyMs = round(iff(SumCountRead > 0, SumDurRead / SumCountRead, 0.0), 1),\n    AvgWriteLatencyMs = round(iff(SumCountWrite > 0, SumDurWrite / SumCountWrite, 0.0), 1)\n| project TimeGenerated, AvgReadLatencyMs, AvgWriteLatencyMs",
+                          "resources": [],
+                          "resultFormat": "time_series",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "max"
+                  ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgReadLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. read latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgWriteLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. write latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-18": {
+        "kind": "Panel",
+        "spec": {
+          "id": 18,
+          "title": "Data table",
+          "description": "SMB client performance detail. Use the Group by and IOPS function variables to change the view. Latency columns have gauge-style cells with green/yellow/red thresholds at 5ms and 20ms.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    ReadIOCount = sum(IOCountRead_d),\n    WriteIOCount = sum(IOCountWrite_d),\n    MetadataIOCount = sum(IOCountMetadata_d),\n    SumDurRead = sum(IOLatencyMsRead_d),\n    SumDurWrite = sum(IOLatencyMsWrite_d),\n    SumIOMBRead = sum(IOMBRead_d),\n    SumIOMBWrite = sum(IOMBWrite_d),\n    avg_iops_read = round(avg(IOPSRead_d), 1), min_iops_read = round(min(IOPSRead_d), 1), max_iops_read = round(max(IOPSRead_d), 1),\n    avg_iops_write = round(avg(IOPSWrite_d), 1), min_iops_write = round(min(IOPSWrite_d), 1), max_iops_write = round(max(IOPSWrite_d), 1),\n    avg_iops_meta = round(avg(IOPSMetadata_d), 1), min_iops_meta = round(min(IOPSMetadata_d), 1), max_iops_meta = round(max(IOPSMetadata_d), 1),\n    ShareCount = dcount(SharePath_s),\n    HostCount = dcount(Computer)\n  by SharePath_s\n| extend\n    AvgReadLatencyMs = round(iff(ReadIOCount > 0, SumDurRead / ReadIOCount, 0.0), 1),\n    AvgWriteLatencyMs = round(iff(WriteIOCount > 0, SumDurWrite / WriteIOCount, 0.0), 1),\n    IOPSRead = iff(\"${iops_function}\" == \"min\", min_iops_read, iff(\"${iops_function}\" == \"max\", max_iops_read, avg_iops_read)),\n    IOPSWrite = iff(\"${iops_function}\" == \"min\", min_iops_write, iff(\"${iops_function}\" == \"max\", max_iops_write, avg_iops_write)),\n    IOPSMetadata = iff(\"${iops_function}\" == \"min\", min_iops_meta, iff(\"${iops_function}\" == \"max\", max_iops_meta, avg_iops_meta)),\n    ReadVolumeMB = round(SumIOMBRead, 1),\n    WriteVolumeMB = round(SumIOMBWrite, 1)\n| project SharePath_s, ReadIOCount, WriteIOCount, MetadataIOCount, AvgReadLatencyMs, AvgWriteLatencyMs, IOPSRead, IOPSWrite, IOPSMetadata, ReadVolumeMB, WriteVolumeMB, ShareCount, HostCount\n| order by SharePath_s asc",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "${group_by:text}"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "GroupValue"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${group_by:text}"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "MetadataIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Metadata IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgReadLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. read latency (ms)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "ms"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "basic",
+                          "type": "gauge"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-YlRd"
+                        }
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": 0
+                            },
+                            {
+                              "color": "yellow",
+                              "value": 5
+                            },
+                            {
+                              "color": "red",
+                              "value": 20
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgWriteLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. write latency (ms)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "ms"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "basic",
+                          "type": "gauge"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-YlRd"
+                        }
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": 0
+                            },
+                            {
+                              "color": "yellow",
+                              "value": 5
+                            },
+                            {
+                              "color": "red",
+                              "value": 20
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSRead"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} read IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSWrite"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} write IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSMetadata"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} metadata IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read data volume (MB)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "decmbytes"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write data volume (MB)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "decmbytes"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ShareCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Share count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "HostCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Host count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byNames",
+                      "options": {
+                        "mode": "include",
+                        "names": [
+                          "ReadIOCount",
+                          "WriteIOCount",
+                          "MetadataIOCount",
+                          "ReadVolumeMB",
+                          "WriteVolumeMB"
+                        ]
+                      }
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.footer.reducers",
+                        "value": [
+                          "sum"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SharePath_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 244
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Share Path"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-19": {
+        "kind": "Panel",
+        "spec": {
+          "id": 19,
+          "title": "Data volume (top [[TopN]]) by Host",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    ReadVolumeMB = round(sum(IOMBRead_d), 1),\n    WriteVolumeMB = round(sum(IOMBWrite_d), 1),\n    TotalMB = round(sum(IOMBRead_d) + sum(IOMBWrite_d), 1)\n  by Computer\n| top [[TopN]] by TotalMB desc\n| project Computer, ReadVolumeMB, WriteVolumeMB",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.6,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "auto",
+                "stacking": "normal",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                },
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decmbytes",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write volume (MB)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Avg. Read Latency",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize SumDurRead = sum(IOLatencyMsRead_d), SumCountRead = sum(IOCountRead_d)\n| extend Value = round(iff(SumCountRead > 0, SumDurRead / SumCountRead, 0.0), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#5A4575"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#5A4575"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-20": {
+        "kind": "Panel",
+        "spec": {
+          "id": 20,
+          "title": "Average latency (top [[TopN]]) by Computer",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    SumDurRead = sum(IOLatencyMsRead_d), SumCountRead = sum(IOCountRead_d),\n    SumDurWrite = sum(IOLatencyMsWrite_d), SumCountWrite = sum(IOCountWrite_d),\n    SumDurRW = sum(IOLatencyMsRead_d) + sum(IOLatencyMsWrite_d),\n    SumCountRW = sum(IOCountRead_d) + sum(IOCountWrite_d)\n  by Computer\n| extend\n    AvgReadLatencyMs = round(iff(SumCountRead > 0, SumDurRead / SumCountRead, 0.0), 1),\n    AvgWriteLatencyMs = round(iff(SumCountWrite > 0, SumDurWrite / SumCountWrite, 0.0), 1),\n    AvgRWLatencyMs = round(iff(SumCountRW > 0, SumDurRW / SumCountRW, 0.0), 1)\n| top [[TopN]] by AvgRWLatencyMs desc\n| project Computer, AvgReadLatencyMs, AvgWriteLatencyMs",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barRadius": 0.1,
+                "barWidth": 0.6,
+                "fullHighlight": false,
+                "groupWidth": 0.7,
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "orientation": "horizontal",
+                "showValue": "auto",
+                "stacking": "normal",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                },
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "fillOpacity": 80,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "lineWidth": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgReadLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. read latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#5A4575",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgWriteLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. write latency (ms)"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#43B5C6",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-21": {
+        "kind": "Panel",
+        "spec": {
+          "id": 21,
+          "title": "Data table",
+          "description": "SMB client performance detail. Use the Group by and IOPS function variables to change the view. Latency columns have gauge-style cells with green/yellow/red thresholds at 5ms and 20ms.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize\n    ReadIOCount = sum(IOCountRead_d),\n    WriteIOCount = sum(IOCountWrite_d),\n    MetadataIOCount = sum(IOCountMetadata_d),\n    SumDurRead = sum(IOLatencyMsRead_d),\n    SumDurWrite = sum(IOLatencyMsWrite_d),\n    SumIOMBRead = sum(IOMBRead_d),\n    SumIOMBWrite = sum(IOMBWrite_d),\n    avg_iops_read = round(avg(IOPSRead_d), 1), min_iops_read = round(min(IOPSRead_d), 1), max_iops_read = round(max(IOPSRead_d), 1),\n    avg_iops_write = round(avg(IOPSWrite_d), 1), min_iops_write = round(min(IOPSWrite_d), 1), max_iops_write = round(max(IOPSWrite_d), 1),\n    avg_iops_meta = round(avg(IOPSMetadata_d), 1), min_iops_meta = round(min(IOPSMetadata_d), 1), max_iops_meta = round(max(IOPSMetadata_d), 1),\n    ShareCount = dcount(SharePath_s),\n    HostCount = dcount(Computer)\n  by Computer\n| extend\n    AvgReadLatencyMs = round(iff(ReadIOCount > 0, SumDurRead / ReadIOCount, 0.0), 1),\n    AvgWriteLatencyMs = round(iff(WriteIOCount > 0, SumDurWrite / WriteIOCount, 0.0), 1),\n    IOPSRead = iff(\"${iops_function}\" == \"min\", min_iops_read, iff(\"${iops_function}\" == \"max\", max_iops_read, avg_iops_read)),\n    IOPSWrite = iff(\"${iops_function}\" == \"min\", min_iops_write, iff(\"${iops_function}\" == \"max\", max_iops_write, avg_iops_write)),\n    IOPSMetadata = iff(\"${iops_function}\" == \"min\", min_iops_meta, iff(\"${iops_function}\" == \"max\", max_iops_meta, avg_iops_meta)),\n    ReadVolumeMB = round(SumIOMBRead, 1),\n    WriteVolumeMB = round(SumIOMBWrite, 1)\n| project Computer, ReadIOCount, WriteIOCount, MetadataIOCount, AvgReadLatencyMs, AvgWriteLatencyMs, IOPSRead, IOPSWrite, IOPSMetadata, ReadVolumeMB, WriteVolumeMB, ShareCount, HostCount\n| order by Computer asc",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "${group_by:text}"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "GroupValue"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${group_by:text}"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "MetadataIOCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Metadata IO count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgReadLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. read latency (ms)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "ms"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "basic",
+                          "type": "gauge"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-YlRd"
+                        }
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": 0
+                            },
+                            {
+                              "color": "yellow",
+                              "value": 5
+                            },
+                            {
+                              "color": "red",
+                              "value": 20
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AvgWriteLatencyMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Avg. write latency (ms)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "ms"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "basic",
+                          "type": "gauge"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-YlRd"
+                        }
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": 0
+                            },
+                            {
+                              "color": "yellow",
+                              "value": 5
+                            },
+                            {
+                              "color": "red",
+                              "value": 20
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSRead"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} read IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSWrite"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} write IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IOPSMetadata"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "${iops_function:text} metadata IOPS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ReadVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Read data volume (MB)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "decmbytes"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "WriteVolumeMB"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Write data volume (MB)"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "decmbytes"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ShareCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Share count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "HostCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Host count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byNames",
+                      "options": {
+                        "mode": "include",
+                        "names": [
+                          "ReadIOCount",
+                          "WriteIOCount",
+                          "MetadataIOCount",
+                          "ReadVolumeMB",
+                          "WriteVolumeMB"
+                        ]
+                      }
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.footer.reducers",
+                        "value": [
+                          "sum"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SharePath_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 244
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Share Path"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Avg. Write Latency",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize SumDurWrite = sum(IOLatencyMsWrite_d), SumCountWrite = sum(IOCountWrite_d)\n| extend Value = round(iff(SumCountWrite > 0, SumDurWrite / SumCountWrite, 0.0), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "ms",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#43B5C6"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#43B5C6"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Avg. Read IOPS",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize Value = round(avg(IOPSRead_d), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#3D8A94"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#3D8A94"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Avg. Write IOPS",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize Value = round(avg(IOPSWrite_d), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#6B6B6B"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#6B6B6B"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Avg. Metadata IOPS",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize Value = round(avg(IOPSMetadata_d), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#333333"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#333333"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Read Data Volume",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize Value = round(sum(IOMBRead_d), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decmbytes",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#C6DBDE"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#C6DBDE"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Write Data Volume",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where (\"${host}\" == \"All\" or Computer == \"${host}\")\n| summarize Value = round(sum(IOMBWrite_d), 1)\n| project Value",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decmbytes",
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "#b98b73"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "fixed",
+                    "fixedColor": "#b98b73"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "RowsLayout",
+      "spec": {
+        "rows": [
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Averages for All Machines",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 3,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 3,
+                        "y": 0,
+                        "width": 3,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 6,
+                        "y": 0,
+                        "width": 4,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 10,
+                        "y": 0,
+                        "width": 4,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 14,
+                        "y": 0,
+                        "width": 4,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 18,
+                        "y": 0,
+                        "width": 3,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-7"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 21,
+                        "y": 0,
+                        "width": 3,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-8"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "IOPS Over Time per Network Share (top [[TopN]])",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-10"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Data Volume & Latency (Top [[TopN]])",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-12"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-13"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 10,
+                        "width": 12,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-19"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 10,
+                        "width": 12,
+                        "height": 10,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-20"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Trends Over Time",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-15"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-16"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Detail",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 14,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-18"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 14,
+                        "width": 24,
+                        "height": 14,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-21"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-1h",
+      "to": "now",
+      "autoRefresh": "5m",
+      "autoRefreshIntervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "SMB Client Performance",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "host",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Host",
+          "hide": "dontHide",
+          "refresh": "onTimeRangeChanged",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "dashboardTime": true,
+                "query": "uberAgent_System_SmbClient_CL\n| where $__timeFilter(TimeGenerated)\n| where isnotempty(Computer)\n| distinct Computer\n| order by Computer asc",
+                "resources": [],
+                "resultFormat": "table"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "alphabeticalAsc",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "All",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "iops_function",
+          "query": "Average : avg, Maximum : max, Minimum : min",
+          "current": {
+            "text": "Average",
+            "value": "avg"
+          },
+          "options": [
+            {
+              "selected": true,
+              "text": "Average",
+              "value": "avg"
+            },
+            {
+              "selected": false,
+              "text": "Maximum",
+              "value": "max"
+            },
+            {
+              "selected": false,
+              "text": "Minimum",
+              "value": "min"
+            }
+          ],
+          "multi": false,
+          "includeAll": false,
+          "label": "IOPS function",
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "allowCustomValue": true,
+          "valuesFormat": "csv"
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "TopN",
+          "current": {
+            "text": "5",
+            "value": "5"
+          },
+          "query": "5",
+          "label": "TopN",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}

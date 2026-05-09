@@ -1,0 +1,1880 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "ad8xql7",
+    "generation": 59,
+    "creationTimestamp": "2026-05-06T15:45:31Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true,
+          "legacyOptions": {
+            "type": "dashboard"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Crosshair",
+    "description": "Citrix Machine Registration & Session Monitoring dashboard — converted from Splunk uberAgent dashboard. Uses Azure Monitor Logs (KQL) against uberAgent data model tables.",
+    "editable": true,
+    "elements": {
+      "panel-11": {
+        "kind": "Panel",
+        "spec": {
+          "id": 11,
+          "title": "Machine Catalogs",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Catalogs_CL\n| where $__timeFilter(TimeGenerated)\n| summarize arg_max(TimeGenerated, *) by Name_s\n| project Name_s, SiteName_s, AllocationType_d, ProvisioningType_d, SessionSupport_d, PersistentUserChanges_d\n| order by Name_s asc",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "CatalogDisplayName_s"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "MachineCount"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.footer.reducers",
+                        "value": [
+                          "sum"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AllocationType_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "index": 1,
+                                "text": "Static"
+                              },
+                              "2": {
+                                "index": 2,
+                                "text": "Random"
+                              },
+                              "3": {
+                                "index": 3,
+                                "text": "Permanent"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Allocation Type"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProvisioningType_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "index": 1,
+                                "text": "MCS"
+                              },
+                              "2": {
+                                "index": 2,
+                                "text": "PVS"
+                              },
+                              "3": {
+                                "index": 3,
+                                "text": "Manual"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Provisioning Type"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SessionSupport_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "index": 1,
+                                "text": "Single Session"
+                              },
+                              "2": {
+                                "index": 2,
+                                "text": "Multi Session"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Session Type"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "PersistentUserChanges_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "index": 1,
+                                "text": "Discard"
+                              },
+                              "2": {
+                                "index": 2,
+                                "text": "On Local"
+                              },
+                              "3": {
+                                "index": 3,
+                                "text": "On PVD"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Persistence Options"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Name_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Catalog Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SiteName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Citrix Site"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-12": {
+        "kind": "Panel",
+        "spec": {
+          "id": 12,
+          "title": "Delivery Groups",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_DesktopGroups_CL\n| where $__timeFilter(TimeGenerated)\n| summarize arg_max(TimeGenerated, *) by Name_s\n| project Name_s, SiteName_s, DesktopKind_d, Enabled_b, IsInMaintenanceMode_b\n| order by Name_s asc",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "DesktopGroupDisplayName_s"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "DesktopKind_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "index": 0,
+                                "text": "Private"
+                              },
+                              "1": {
+                                "index": 1,
+                                "text": "Shared"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Desktop Kind"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IsInMaintenanceMode_b"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Maintenance Mode"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-text"
+                        }
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "false": {
+                                "color": "dark-green",
+                                "index": 0,
+                                "text": "false"
+                              },
+                              "true": {
+                                "color": "dark-red",
+                                "index": 1,
+                                "text": "true"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Enabled_b"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Enabled"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-text"
+                        }
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "false": {
+                                "color": "dark-red",
+                                "index": 0,
+                                "text": "false"
+                              },
+                              "true": {
+                                "color": "dark-green",
+                                "index": 1,
+                                "text": "true"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SiteName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Citrix Site"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Name_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Delivery Group Name"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-14": {
+        "kind": "Panel",
+        "spec": {
+          "id": 14,
+          "title": "Machine Detail",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| where isnotempty(HostedMachineName_s)\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| project HostedMachineName_s, SiteName_s, CatalogDisplayName_s, DesktopGroupDisplayName_s, CurrentRegistrationState_d, CurrentPowerState_d, CurrentSessionCount_d, IPAddress, AgentVersion_s, IsInMaintenanceMode_b\n| order by HostedMachineName_s asc",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "CurrentSessionCount_d"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CurrentSessionCount_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "basic",
+                          "type": "gauge"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-purples"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "HostedMachineName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.footer.reducers",
+                        "value": [
+                          "count"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "SiteName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Citrix Site"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CatalogDisplayName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Machine Catalog"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "DesktopGroupDisplayName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Delivery Group"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CurrentRegistrationState_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Registration State"
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "color": "dark-red",
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "color": "dark-green",
+                                "index": 1,
+                                "text": "Registered"
+                              },
+                              "2": {
+                                "color": "dark-purple",
+                                "index": 2,
+                                "text": "Unregistered"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-text"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CurrentPowerState_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Power State"
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "0": {
+                                "color": "#808080",
+                                "index": 0,
+                                "text": "Unknown"
+                              },
+                              "1": {
+                                "color": "dark-red",
+                                "index": 1,
+                                "text": "Unavailable"
+                              },
+                              "2": {
+                                "color": "dark-purple",
+                                "index": 2,
+                                "text": "Off"
+                              },
+                              "3": {
+                                "color": "dark-green",
+                                "index": 3,
+                                "text": "On"
+                              },
+                              "4": {
+                                "color": "yellow",
+                                "index": 4,
+                                "text": "Suspended"
+                              },
+                              "5": {
+                                "color": "light-green",
+                                "index": 5,
+                                "text": "Turning On"
+                              },
+                              "6": {
+                                "color": "super-light-purple",
+                                "index": 6,
+                                "text": "Turning Off"
+                              },
+                              "7": {
+                                "color": "super-light-yellow",
+                                "index": 7,
+                                "text": "Suspending"
+                              },
+                              "8": {
+                                "color": "light-green",
+                                "index": 8,
+                                "text": "Resuming"
+                              },
+                              "9": {
+                                "color": "#f0cfcf",
+                                "index": 9,
+                                "text": "Unmanaged"
+                              },
+                              "10": {
+                                "color": "#242323",
+                                "index": 10,
+                                "text": "Not Supported"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-text"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "CurrentSessionCount_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Session Count"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AgentVersion_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "VDA Version"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "IsInMaintenanceMode_b"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "In Maintenance Mode"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "color-text"
+                        }
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "false": {
+                                "color": "dark-green",
+                                "index": 1,
+                                "text": "Off"
+                              },
+                              "true": {
+                                "color": "dark-red",
+                                "index": 0,
+                                "text": "On"
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Total Machines",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| summarize TotalMachines = count()",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Registered",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| where CurrentRegistrationState_d == \"1\"\n| summarize Registered = count()",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Unregistered",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| where CurrentRegistrationState_d == \"2\"\n| summarize Unregistered = count()",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Active Sessions",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| summarize ActiveSessions = sum(CurrentSessionCount_d)",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "purple"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Registration Rate",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize arg_max(TimeGenerated, *) by HostedMachineName_s\n| summarize Total = count(), Registered = countif(CurrentRegistrationState_d == \"Registered\")\n| extend RegistrationRate = round(100.0 * Registered / Total, 1)\n| project RegistrationRate",
+                          "resources": [],
+                          "resultFormat": "table",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "gauge",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto",
+                "textMode": "auto"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "red"
+                      },
+                      {
+                        "value": 70,
+                        "color": "yellow"
+                      },
+                      {
+                        "value": 90,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Registration Count Over Time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize Registered = countif(CurrentRegistrationState_d == \"1\"), Unregistered = countif(CurrentRegistrationState_d == \"2\") by  bin(TimeGenerated, $__interval)",
+                          "resources": [],
+                          "resultFormat": "time_series",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "mean",
+                    "lastNotNull",
+                    "max"
+                  ],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Registered"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "green",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Unregistered"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "red",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "id": 9,
+          "title": "Session Count Over Time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| where ('[[deliverygroup]]' == \"*\" or DesktopGroupDisplayName_s == '[[deliverygroup]]')\n| summarize TotalSessions = sum(CurrentSessionCount_d) by bin(TimeGenerated, $__interval)",
+                          "resources": [],
+                          "resultFormat": "time_series",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "table",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "short",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 20,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TotalSessions"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "purple",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "RowsLayout",
+      "spec": {
+        "rows": [
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Overview Metrics",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 5,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 5,
+                        "y": 0,
+                        "width": 5,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 10,
+                        "y": 0,
+                        "width": 5,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 15,
+                        "y": 0,
+                        "width": 5,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 20,
+                        "y": 0,
+                        "width": 4,
+                        "height": 5,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Trends Over Time",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-8"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-9"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Machine Catalogs & Delivery Groups",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-11"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 9,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-12"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Machine Detail",
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 12,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-14"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-24h",
+      "to": "now",
+      "autoRefresh": "1m",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Citrix Machine Registration & Sessions",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "deliverygroup",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Delivery Group",
+          "hide": "dontHide",
+          "refresh": "onTimeRangeChanged",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "dashboardTime": true,
+                "mode": "raw",
+                "query": "uberAgent_Citrix_Machines_CL\n| where $__timeFilter(TimeGenerated)\n| distinct DesktopGroupDisplayName_s\n| where isnotempty(DesktopGroupDisplayName_s)\n| order by DesktopGroupDisplayName_s asc\n| project DesktopGroupDisplayName_s = strcat('\"', DesktopGroupDisplayName_s, '\"')",
+                "resources": [],
+                "resultFormat": "table",
+                "timeColumn": "TimeGenerated"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "alphabeticalAsc",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}

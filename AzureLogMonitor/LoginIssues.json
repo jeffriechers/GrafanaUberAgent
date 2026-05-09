@@ -1,0 +1,738 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "defm38lld1r0ga",
+    "generation": 10,
+    "creationTimestamp": "2026-05-04T18:08:51Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Top [[TopN]] Average Profile Load by Computer",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Logon_LogonDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| summarize ProfilePercentRaw = avg(ProfileLoadTimeMs_d) by Computer\r\n| extend [[Function]]_ProfilePercent = round(ProfilePercentRaw, 1)\r\n| order by [[Function]]_ProfilePercent\r\n| take [[TopN]]\r\n| project Computer, [[Function]]_ProfilePercent",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "limit": 25,
+                  "values": true
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "displayName": "$__cell_0",
+                  "unit": "ms",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Top [[TopN]] Longest Profile Load by Users",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Logon_LogonDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize ProfilePercentRaw = max(ProfileLoadTimeMs_d) by User_s\r\n| extend [[Function]]_ProfilePercent = round(ProfilePercentRaw, 1)\r\n| order by [[Function]]_ProfilePercent\r\n| take [[TopN]]\r\n| project User_s, [[Function]]_ProfilePercent",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "limit": 25,
+                  "values": true
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "displayName": "$__cell_0",
+                  "unit": "ms",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 30000,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60000,
+                        "color": "light-red"
+                      },
+                      {
+                        "value": 90000,
+                        "color": "dark-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Top [[TopN]] Longest GPO Processing by Users",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Logon_LogonDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize ProfilePercentRaw = max(GroupPolicyTotalProcessingTimeMs_d) by User_s\r\n| extend [[Function]]_ProfilePercent = round(ProfilePercentRaw, 1)\r\n| order by [[Function]]_ProfilePercent\r\n| take [[TopN]]\r\n| project User_s, [[Function]]_ProfilePercent",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "limit": 25,
+                  "values": true
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "displayName": "$__cell_0",
+                  "unit": "ms",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 30000,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60000,
+                        "color": "light-red"
+                      },
+                      {
+                        "value": 90000,
+                        "color": "dark-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Top [[TopN]] Longest Shell Startup by Users",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Logon_LogonDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize ProfilePercentRaw = max(ShellStartupTimeMs_d) by User_s\r\n| extend [[Function]]_ProfilePercent = round(ProfilePercentRaw, 1)\r\n| order by [[Function]]_ProfilePercent\r\n| take [[TopN]]\r\n| project User_s, [[Function]]_ProfilePercent",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "limit": 25,
+                  "values": true
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "displayName": "$__cell_0",
+                  "unit": "ms",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 30000,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60000,
+                        "color": "light-red"
+                      },
+                      {
+                        "value": 90000,
+                        "color": "dark-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Top [[TopN]] Longest Total Logon Time",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Logon_LogonDetail_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| summarize ProfilePercentRaw = max(TotalLogonTimeMs_d) by User_s,Computer\r\n| extend [[Function]]_ProfilePercent = round(ProfilePercentRaw, 1)\r\n| order by [[Function]]_ProfilePercent\r\n| take [[TopN]]\r\n| project User_s,Computer,[[Function]]_ProfilePercent",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "bargauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayMode": "gradient",
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "maxVizHeight": 300,
+                "minVizHeight": 16,
+                "minVizWidth": 8,
+                "namePlacement": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "limit": 25,
+                  "values": true
+                },
+                "showUnfilled": true,
+                "sizing": "auto",
+                "text": {},
+                "valueMode": "color"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "displayName": "$__cell_0 on $__cell_1",
+                  "unit": "ms",
+                  "decimals": 0,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 30000,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 60000,
+                        "color": "light-red"
+                      },
+                      {
+                        "value": 90000,
+                        "color": "dark-red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 11,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 11,
+              "width": 12,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 11,
+              "width": 12,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 19,
+              "width": 12,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 19,
+              "width": 12,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-5m",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Login Issues",
+    "variables": [
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "Function",
+          "query": "avg,count,max,min,sum,stdev",
+          "current": {
+            "text": "avg",
+            "value": "avg"
+          },
+          "options": [],
+          "multi": false,
+          "includeAll": false,
+          "label": "Function",
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "allowCustomValue": true,
+          "valuesFormat": "csv"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Logon_LogonDetail_CL\r\n| distinct Computer\r\n| project Computer = strcat('\"', Computer, '\"')",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "10e189f0-7abe-4aca-a00e-6805d9fe80bb"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "TopN",
+          "current": {
+            "text": "5",
+            "value": "5"
+          },
+          "query": "5",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}

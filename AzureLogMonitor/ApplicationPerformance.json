@@ -1,0 +1,436 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "addvzp5",
+    "generation": 2,
+    "creationTimestamp": "2026-05-04T18:09:26Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "datasource",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "datasource-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true,
+          "legacyOptions": {
+            "type": "dashboard"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-18": {
+        "kind": "Panel",
+        "spec": {
+          "id": 18,
+          "title": "Application performance table",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "appInsights": {
+                          "dimension": "none",
+                          "metricName": "select",
+                          "rawQuery": false,
+                          "rawQueryString": "",
+                          "timeColumn": "timestamp",
+                          "timeGrain": "auto",
+                          "valueColumn": ""
+                        },
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Process_ProcessDetail_CL\n| where $__timeFilter(TimeGenerated)\n| where Computer matches regex '[[Computer]]'\n| where ProcUser_s contains [[User]]\n| summarize arg_max(TimeGenerated, *) by ProcName_s\n| take [[TopN]]\n| project Computer, ProcUser_s, ProcName_s, ProcCPUPercent_d, ProcCPUTimeMs_d, ProcWorkingSetMB_d, ProcNetKBPS_d\n| order by Computer,ProcUser_s\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "azureMonitor": {
+                          "aggOptions": [],
+                          "dimensionFilter": "*",
+                          "metricDefinition": "select",
+                          "metricName": "select",
+                          "metricNamespace": "select",
+                          "resources": [
+                            {
+                              "resourceGroup": "select",
+                              "resourceName": "select"
+                            }
+                          ],
+                          "timeGrain": "auto",
+                          "timeGrains": [],
+                          "top": "10"
+                        },
+                        "queryType": "Azure Log Analytics",
+                        "subscription": ""
+                      },
+                      "labels": {
+                        "grafana.app/export-label": ""
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "enablePagination": true,
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Network Usage in KBPS"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "links",
+                        "value": []
+                      },
+                      {
+                        "id": "custom.align",
+                        "value": "auto"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Username"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Executable"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcCPUPercent_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "CPU Percentage"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcCPUTimeMs_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "CPU Time in MS"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcWorkingSetMB_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "RAM Usage in MB"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcNetKBPS_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Network Usage in KBPS"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "text",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "\n# Application Performance\n\nThis dashboard displays detailed information about machine performance. The terms 'machine', 'computer' and 'host' are used interchangeably.\n\n\n\n",
+                "mode": "markdown"
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          },
+          "transparent": true
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 3,
+              "width": 24,
+              "height": 15,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-18"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-1h",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Application Performance",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Computer (regex, case-sensitiv):",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Application_ApplicationInventory_CL\r\n| distinct Computer\r\n| project Computer = strcat('\"', Computer, '\"')",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "User",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "User",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Process_ProcessDetail_CL\r\n| distinct ProcUser_s\r\n| project User = split(ProcUser_s, \"\\\\\")[1]",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "\"\"",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "TopN",
+          "current": {
+            "text": "5",
+            "value": "5"
+          },
+          "query": "5",
+          "label": "TopN",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}

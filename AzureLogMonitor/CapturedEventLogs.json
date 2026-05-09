@@ -1,0 +1,474 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adl8zzb",
+    "generation": 4,
+    "creationTimestamp": "2026-05-04T18:09:43Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "datasource",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "datasource-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true,
+          "legacyOptions": {
+            "type": "dashboard"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "description": "Select Event Log Entries",
+    "editable": true,
+    "elements": {
+      "panel-13": {
+        "kind": "Panel",
+        "spec": {
+          "id": 13,
+          "title": "Event Logs",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "azureLogAnalytics": {
+                          "dashboardTime": true,
+                          "mode": "raw",
+                          "query": "uberAgentESA_System_WinEvtLogForwarding_CL \r\n| where Computer matches regex '[[Computer]]'\r\n| where User_s contains [[User]]\r\n| where $__timeFilter(TimeGenerated)\r\n| extend Level = case(\r\n  Level_d == 2, \"Error\",\r\n  Level_d == 3, \"Warning\",\r\n  \"Unknown\"\r\n  )\r\n| summarize arg_max(TimeGenerated, *) by Computer, ProviderName_s,EventID_d, Level, ProcessID_d, Channel_s,User_s\r\n| project TimeGenerated,Computer,ProviderName_s,EventID_d,Level,ProcessID_d,Channel_s,User_s,EventData_s",
+                          "resources": [],
+                          "resultFormat": "logs",
+                          "timeColumn": "TimeGenerated"
+                        },
+                        "azureMonitor": {
+                          "allowedTimeGrainsMs": [],
+                          "dimensionFilters": [],
+                          "resources": [],
+                          "timeGrain": "auto"
+                        },
+                        "queryType": "Azure Log Analytics"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "enablePagination": true,
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "TimeGenerated"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "left",
+                    "cellOptions": {
+                      "type": "color-text"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false,
+                    "minWidth": 0,
+                    "wrapHeaderText": false,
+                    "wrapText": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProviderName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Source"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "EventID_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Event ID"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Level"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Log Level"
+                      },
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "Error": {
+                                "color": "dark-red",
+                                "index": 0
+                              },
+                              "Warning": {
+                                "color": "yellow",
+                                "index": 1
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcessID_d"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "PID"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Channel_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Channel"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "User_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "User"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "EventData_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Event Message"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "json-view"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 148
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Event ID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 116
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Log Level"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 108
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "PID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 61
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Channel"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 147
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "User"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 139
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Source"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 272
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TimeGenerated"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 221
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 20,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-13"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-15m",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Captured Event Logs",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Computer (regex, case-sensitiv):",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgentESA_System_WinEvtLogForwarding_CL \r\n| distinct Computer\r\n| project Computer = strcat('\"', Computer, '\"')",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "alphabeticalAsc",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "User",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgentESA_System_WinEvtLogForwarding_CL\r\n| distinct User_s\r\n| project User_s = split(User_s, \"\\\\\")[1]\r\n",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "alphabeticalAsc",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": " \"\"",
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,462 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "addrnzn",
+    "generation": 4,
+    "creationTimestamp": "2026-05-04T18:09:34Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "datasource",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "datasource-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true,
+          "legacyOptions": {
+            "type": "dashboard"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-18": {
+        "kind": "Panel",
+        "spec": {
+          "id": 18,
+          "title": "Browser Usage",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-monitor-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "appInsights": {
+                          "dimension": "none",
+                          "metricName": "select",
+                          "rawQuery": false,
+                          "rawQueryString": "",
+                          "timeColumn": "timestamp",
+                          "timeGrain": "auto",
+                          "valueColumn": ""
+                        },
+                        "azureLogAnalytics": {
+                          "dashboardTime": false,
+                          "mode": "raw",
+                          "query": "uberAgent_Application_BrowserWebRequests2_CL \n| where $__timeFilter(TimeGenerated)\n| where Computer matches regex '[[Computer]]'\n| where ProcUser_s contains [[User]]\n| extend BrowserName = case(\n  Browser_d == 1, \"Chrome\",\n  Browser_d == 3, \"Firefox\",\n  Browser_d == 4, \"MS Edge\",\n  \"Unknown\"\n  )\n| summarize Count = count() by TabHost_s,ProcUser_s,Computer,BrowserName\n| take [[TopN]]\n| project Computer, ProcUser_s,BrowserName, TabHost_s, Count\n| order by Count\n",
+                          "resources": [],
+                          "resultFormat": "table"
+                        },
+                        "azureMonitor": {
+                          "aggOptions": [],
+                          "dimensionFilter": "*",
+                          "metricDefinition": "select",
+                          "metricName": "select",
+                          "metricNamespace": "select",
+                          "resources": [
+                            {
+                              "resourceGroup": "select",
+                              "resourceName": "select"
+                            }
+                          ],
+                          "timeGrain": "auto",
+                          "timeGrains": [],
+                          "top": "10"
+                        },
+                        "queryType": "Azure Log Analytics",
+                        "subscription": ""
+                      },
+                      "labels": {
+                        "grafana.app/export-label": ""
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "enablePagination": true,
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Count"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": true
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "links",
+                        "value": []
+                      },
+                      {
+                        "id": "custom.align",
+                        "value": "auto"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcUser_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Username"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "BrowserName"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Browser Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TabHost_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "URL"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byType",
+                      "options": "number"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Page hits"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "text",
+            "version": "12.4.2",
+            "spec": {
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "\n# Browser Usage\n\nThis dashboard displays detailed information about Browser Activity.  Only Browsers that have the necessary UberAgent extension installed will display here.\n\n",
+                "mode": "markdown"
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          },
+          "transparent": true
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 3,
+              "width": 24,
+              "height": 15,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-18"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-24h",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Browser Usage",
+    "variables": [
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "Function",
+          "query": "avg,count,max,min,sum,stdev",
+          "current": {
+            "text": "avg",
+            "value": "avg"
+          },
+          "options": [
+            {
+              "selected": true,
+              "text": "avg",
+              "value": "avg"
+            },
+            {
+              "selected": false,
+              "text": "count",
+              "value": "count"
+            },
+            {
+              "selected": false,
+              "text": "max",
+              "value": "max"
+            },
+            {
+              "selected": false,
+              "text": "min",
+              "value": "min"
+            },
+            {
+              "selected": false,
+              "text": "sum",
+              "value": "sum"
+            },
+            {
+              "selected": false,
+              "text": "stdev",
+              "value": "stdev"
+            }
+          ],
+          "multi": false,
+          "includeAll": false,
+          "label": "Function",
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "allowCustomValue": true,
+          "valuesFormat": "csv"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Computer (regex, case-sensitiv):",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Application_ApplicationInventory_CL\r\n| distinct Computer\r\n| project Computer = strcat('\"', Computer, '\"')",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "User",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "User",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-monitor-datasource",
+            "version": "v0",
+            "spec": {
+              "azureLogAnalytics": {
+                "mode": "raw",
+                "query": "uberAgent_Process_ProcessDetail_CL\r\n| distinct ProcUser_s\r\n| project User = split(ProcUser_s, \"\\\\\")[1]",
+                "resources": []
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": ""
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "\"\"",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "TextVariable",
+        "spec": {
+          "name": "TopN",
+          "current": {
+            "text": "50",
+            "value": "50"
+          },
+          "query": "50",
+          "label": "TopN",
+          "hide": "dontHide",
+          "skipUrlSync": false
+        }
+      }
+    ]
+  }
+}
