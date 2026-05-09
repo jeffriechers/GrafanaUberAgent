@@ -703,7 +703,7 @@
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "10e189f0-7abe-4aca-a00e-6805d9fe80bb"
+              "subscription": ""
             },
             "labels": {
               "grafana.app/export-label": "grafana-azure-monitor-datasource-1"

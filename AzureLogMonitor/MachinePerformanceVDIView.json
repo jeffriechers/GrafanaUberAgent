@@ -31,7 +31,7 @@
       }
     ],
     "cursorSync": "Off",
-    "description": "Machine Performance Dashboard for all machines, or a signle machine",
+    "description": "Machine Performance Dashboard for all machines, or a single machine",
     "editable": true,
     "elements": {
       "panel-10": {
@@ -87,7 +87,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -253,7 +253,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -305,7 +305,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -477,7 +477,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -598,7 +598,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -718,7 +718,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1121,7 +1121,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1327,7 +1327,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1448,7 +1448,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1576,7 +1576,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1705,7 +1705,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"

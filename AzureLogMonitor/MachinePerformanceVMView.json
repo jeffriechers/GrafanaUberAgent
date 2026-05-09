@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "UA2hpwyZz",
-    "generation": 10,
+    "generation": 11,
     "creationTimestamp": "2026-05-04T18:10:04Z",
     "labels": {},
     "annotations": {}
@@ -86,7 +86,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -252,7 +252,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -283,9 +283,7 @@
                           "dashboardTime": false,
                           "mode": "raw",
                           "query": "uberAgent_System_SystemPerformanceSummary2_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where Computer matches regex '[[Computer]]'\r\n| summarize [\"Avg. CPU relative frequency (%)\"] = round(avg(CPURelativeFrequencyPercent_d),1) by bin(TimeGenerated, $__interval)\r\n| order by TimeGenerated desc",
-                          "resources": [
-                            "/subscriptions//resourceGroups/rg-infsvcs-citrix-epic-eus/providers/Microsoft.OperationalInsights/workspaces/log-citrix-p-eus"
-                          ],
+                          "resources": [],
                           "resultFormat": "time_series",
                           "workspace": "76910c85-528e-42f8-96cd-d9aada8dfb53"
                         },
@@ -306,7 +304,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -478,7 +476,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -606,7 +604,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -725,7 +723,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -857,7 +855,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -977,7 +975,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1097,7 +1095,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1225,7 +1223,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
@@ -1354,7 +1352,7 @@
                           "top": "10"
                         },
                         "queryType": "Azure Log Analytics",
-                        "subscription": "fa428e01-456e-42a3-a808-c51f24a6fe20"
+                        "subscription": ""
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-azure-monitor-datasource-1"
