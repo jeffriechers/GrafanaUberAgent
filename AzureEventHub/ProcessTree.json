@@ -1,0 +1,458 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adnmps7",
+    "generation": 7,
+    "creationTimestamp": "2026-06-04T16:16:50Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Process Tree",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "// Process Startup\r\nlet Startup =\r\n    Process_ProcessStartup\r\n    | where $__timeFilter(Timestamp)\r\n    | where Host matches regex '[[Computer]]'\r\n    | where isnotempty(ProcParentGUID)\r\n    | project\r\n        ProcGUID,\r\n        Host,\r\n        ProcName,\r\n        PID = ProcID,\r\n        ProcParentName,\r\n        ParentPID = ProcParentID,\r\n        ProcParentGUID,\r\n        AppId,\r\n        AppVersion,\r\n        ProcCmdline,\r\n        IsElevated,\r\n        IsProtected,\r\n        TimestampProcStart = Timestamp;\r\n\r\n// Process Stop\r\nlet Stop =\r\n    Process_ProcessStop\r\n    | project\r\n        ProcGUID,\r\n        ProcLifetimeMs,\r\n        TimeStampProcStop = Timestamp;\r\n\r\n// Join Startup + Stop\r\nStartup\r\n| join kind=leftouter Stop on ProcGUID\r\n",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "TimeStampProcStop"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcGUID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom.viz",
+                        "value": true
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcParentGUID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom.viz",
+                        "value": true
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcGUID1"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom.viz",
+                        "value": true
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcLifetimeMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "ms"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TimestampProcStart"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 169
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcName"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcParentName"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Parent Name"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcParentName"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 174
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "AppVersion"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Application Version"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcCmdline"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Cmd Line"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "IsElevated"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Elevated Process"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "IsProtected"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Protected Process"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "TimestampProcStart"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Start Time"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "ProcLifetimeMs"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Runtime"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "TimeStampProcStop"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Process Stop Time"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Host"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 156
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 15,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "ESA"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-1h",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Process Tree",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Computer (regex, case-sensitiv):",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-data-explorer-datasource",
+            "version": "v0",
+            "spec": {
+              "OpenAI": false,
+              "azureLogAnalytics": {
+                "query": "",
+                "resources": []
+              },
+              "clusterUri": "",
+              "database": "uberagenthomelab",
+              "expression": {
+                "groupBy": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "reduce": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "where": {
+                  "expressions": [],
+                  "type": "and"
+                }
+              },
+              "pluginVersion": "7.2.6",
+              "query": "Process_ProcessStartup\r\n| where $__timeFilter(Timestamp)\r\n| distinct Host\r\n| project Host = strcat('\"',Host,'\"')",
+              "querySource": "raw",
+              "queryType": "KQL",
+              "rawMode": true,
+              "refId": "A",
+              "resultFormat": "table",
+              "subscription": "10e189f0-7abe-4aca-a00e-6805d9fe80bb"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "Process_ProcessStartup\r\n| where $__timeFilter(Timestamp)\r\n| distinct Host\r\n| project Host = strcat('\"',Host,'\"')",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}

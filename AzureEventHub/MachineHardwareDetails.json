@@ -1,0 +1,609 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "admngmt",
+    "generation": 18,
+    "creationTimestamp": "2026-06-04T15:40:40Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "OS Platform",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_MachineInventory\r\n| summarize arg_max(Timestamp, *) by Host\r\n| summarize Count = count() by OsName\r\n| order by Count desc",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "displayLabels": [
+                  "value"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": true
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "semi-dark-yellow"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-21": {
+        "kind": "Panel",
+        "spec": {
+          "id": 21,
+          "title": "OS Build Numbers",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_MachineInventory\r\n| summarize arg_max(Timestamp, *) by Host\r\n| summarize Count = count() by OsName, OsBuild\r\n| order by Count desc",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "OsName"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 331
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-22": {
+        "kind": "Panel",
+        "spec": {
+          "id": 22,
+          "title": "Vendor",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_MachineInventory\r\n| summarize arg_max(Timestamp, *) by Host\r\n| summarize Count = count() by HwManufacturer\r\n| order by Count desc",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "HwManufacturer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 410
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-23": {
+        "kind": "Panel",
+        "spec": {
+          "id": 23,
+          "title": "OS Platform",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_MachineInventory\r\n| summarize arg_max(Timestamp, *) by Host\r\n| order by OsName\r\n| project Host,OsName,OsVersion,OsBuild,OsArchitecture,AdDomainNetBios,AdDomainDns,AdOu,CtxFarmName,CtxMachineCatalogName,CtxDeliveryGroupName,CPUCoresLogical,RAMSizeGB,OsPlatform",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "none",
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "OsName"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 231
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ComputerNameCanonical"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 356
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AdSite"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 186
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "RowsLayout",
+      "spec": {
+        "rows": [
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "title": "Machine Hardware Details",
+              "collapse": false,
+              "fillScreen": true,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 13,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 13,
+                        "y": 0,
+                        "width": 10,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-22"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 8,
+                        "width": 23,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-21"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "x": 0,
+                        "y": 16,
+                        "width": 23,
+                        "height": 8,
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-23"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "UXM"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-6h",
+      "to": "now",
+      "autoRefresh": "5m",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Machine Hardware Details",
+    "variables": []
+  }
+}

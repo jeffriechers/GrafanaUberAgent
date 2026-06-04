@@ -1,0 +1,498 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adzpqg2",
+    "generation": 4,
+    "creationTimestamp": "2026-06-04T16:30:06Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Scheduled Tasks List",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_ScheduledTasks\r\n| where $__timeFilter(Timestamp)\r\n| extend \r\n  TaskFolder,TaskName\r\n  | summarize Count = count() by TaskFolder,TaskName\r\n",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskFolder_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 673
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskUserName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 231
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "TaskName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "links",
+                        "value": [
+                          {
+                            "title": "Details",
+                            "url": "/d/adhtmpr/scheduled-tasks?var-TaskName=%22${__value.raw}%22"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Scheduled Tasks Detail",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "let Task = \r\nSystem_ScheduledTasks\r\n| where $__timeFilter(Timestamp)\r\n| where TaskName matches regex '[[TaskName]]'\r\n| project \r\n  Timestamp,\r\n  Host,\r\n  TaskHidden,\r\n  TaskAuthor;\r\n\r\nlet Actions =\r\nSystem_ScheduledTaskActions\r\n| where $__timeFilter(Timestamp)\r\n| project\r\n  Timestamp,\r\n  ComBinary;\r\n\r\nlet Triggers = \r\nSystem_ScheduledTaskTriggers\r\n| where $__timeFilter(Timestamp)\r\n| project\r\n  Timestamp,\r\n  TaskPath;\r\n\r\nTask\r\n| join kind=leftouter Actions on Timestamp\r\n| join kind=leftouter Triggers on Timestamp",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskFolder_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 673
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskUserName_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 231
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "TimeGenerated1"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom.viz",
+                        "value": true
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "TimeGenerated2"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.hideFrom.viz",
+                        "value": true
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Computer"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 148
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskHidden_b"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 135
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TaskAuthor_s"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 253
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TimeGenerated"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 220
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 9,
+              "width": 24,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "ESA"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-1h",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Scheduled Tasks",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "TaskName",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "TaskName",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-data-explorer-datasource",
+            "version": "v0",
+            "spec": {
+              "OpenAI": false,
+              "azureLogAnalytics": {
+                "query": "",
+                "resources": []
+              },
+              "clusterUri": "",
+              "database": "uberagenthomelab",
+              "expression": {
+                "groupBy": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "reduce": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "where": {
+                  "expressions": [],
+                  "type": "and"
+                }
+              },
+              "pluginVersion": "7.2.6",
+              "query": "System_ScheduledTasks\r\n| where $__timeFilter(Timestamp)\r\n|distinct TaskName\r\n| project TaskName = strcat('\"', TaskName, '\"')",
+              "querySource": "raw",
+              "queryType": "KQL",
+              "rawMode": true,
+              "refId": "A",
+              "resultFormat": "table",
+              "subscription": "10e189f0-7abe-4aca-a00e-6805d9fe80bb"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "System_ScheduledTasks\r\n| where $__timeFilter(Timestamp)\r\n|distinct TaskName\r\n| project TaskName = strcat('\"', TaskName, '\"')",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}

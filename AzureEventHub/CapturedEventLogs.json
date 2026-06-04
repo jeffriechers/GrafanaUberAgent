@@ -1,0 +1,386 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "ad52mbq",
+    "generation": 8,
+    "creationTimestamp": "2026-06-03T22:49:13Z",
+    "labels": {},
+    "annotations": {}
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Event Logs",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-azure-data-explorer-datasource",
+                      "version": "v0",
+                      "spec": {
+                        "OpenAI": false,
+                        "database": "uberagenthomelab",
+                        "expression": {
+                          "groupBy": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "reduce": {
+                            "expressions": [],
+                            "type": "and"
+                          },
+                          "where": {
+                            "expressions": [],
+                            "type": "and"
+                          }
+                        },
+                        "pluginVersion": "7.2.6",
+                        "query": "System_WinEvtLogForwarding\r\n| where Host matches regex '[[Computer]]'\r\n| where User contains '[[User]]'\r\n| where $__timeFilter(Timestamp)\r\n| extend Level = case(\r\n  Level == 2, \"Error\",\r\n  Level == 3, \"Warning\",\r\n  \"Unknown\"\r\n  )\r\n| summarize arg_max(Timestamp, *) by Host, ProviderName,EventID, Level, ProcessID, Channel,User\r\n| project Timestamp,Host,ProviderName,EventID,Level,ProcessID,Channel,User,EventData",
+                        "querySource": "raw",
+                        "queryType": "KQL",
+                        "rawMode": true,
+                        "resultFormat": "table"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.0.1+security-01",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "color-text"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Level"
+                    },
+                    "properties": [
+                      {
+                        "id": "mappings",
+                        "value": [
+                          {
+                            "options": {
+                              "Error": {
+                                "color": "dark-red",
+                                "index": 0
+                              },
+                              "Warning": {
+                                "color": "dark-yellow",
+                                "index": 1
+                              }
+                            },
+                            "type": "value"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "custom.width",
+                        "value": 105
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "EventData"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "type": "json-view"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ProcessID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 102
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "EventID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 93
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Host"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 127
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 20,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "ESA"
+    ],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "now-2d",
+      "to": "now",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "Captured Event Logs",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "Computer",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "Computer (regex, case-sensitiv):",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-data-explorer-datasource",
+            "version": "v0",
+            "spec": {
+              "OpenAI": false,
+              "clusterUri": "",
+              "database": "uberagenthomelab",
+              "expression": {
+                "groupBy": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "reduce": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "where": {
+                  "expressions": [],
+                  "type": "and"
+                }
+              },
+              "pluginVersion": "7.2.6",
+              "query": "System_WinEvtLogForwarding\r\n| where $__timeFilter(Timestamp)\r\n| distinct Host\r\n| project Host = strcat('\"',Host, '\"')",
+              "querySource": "raw",
+              "queryType": "KQL",
+              "rawMode": true,
+              "resultFormat": "table"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "System_WinEvtLogForwarding\r\n| where $__timeFilter(Timestamp)\r\n| distinct Host\r\n| project Host = strcat('\"',Host, '\"')",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "*",
+          "allowCustomValue": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "User",
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "label": "User",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-azure-data-explorer-datasource",
+            "version": "v0",
+            "spec": {
+              "OpenAI": false,
+              "clusterUri": "",
+              "database": "uberagenthomelab",
+              "expression": {
+                "groupBy": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "reduce": {
+                  "expressions": [],
+                  "type": "and"
+                },
+                "where": {
+                  "expressions": [],
+                  "type": "and"
+                }
+              },
+              "pluginVersion": "7.2.6",
+              "query": "System_WinEvtLogForwarding\r\n| where $__timeFilter(Timestamp)\r\n| distinct User\r\n| project User = split(User, \"\\\\\")[1]",
+              "querySource": "raw",
+              "queryType": "KQL",
+              "rawMode": true,
+              "resultFormat": "table"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-azure-data-explorer-datasource-1"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "System_WinEvtLogForwarding\r\n| where $__timeFilter(Timestamp)\r\n| distinct User\r\n| project User = split(User, \"\\\\\")[1]",
+          "options": [],
+          "multi": false,
+          "includeAll": true,
+          "allValue": "'\"\"'",
+          "allowCustomValue": true
+        }
+      }
+    ],
+    "preferences": {
+      "layout": {
+        "kind": "GridLayout",
+        "spec": {
+          "items": []
+        }
+      }
+    }
+  }
+}
