@@ -1,4 +1,4 @@
-# Azure Log Monitor Dashboard Screenshots
+# Azure Data Explorer Dashboard Screenshots
 
 ### App Delays
 
