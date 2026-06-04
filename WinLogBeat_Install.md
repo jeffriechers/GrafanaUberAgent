@@ -1,5 +1,5 @@
 ## WinLogBeat Installation
-WinLogBeat is an Elastic Agent that gets installed on Windows Servers and Desktops to capture Windows Event Logs and forward them to your Elasticsearch instance for aggregating and visualizing your event logs for easy searching of issues.
+WinLogBeat is an Elastic Agent that gets installed on Windows Servers and Desktops to capture Windows Event Logs and forward them to your Elasticsearch instance for aggregating and visualizing your event logs for easy searching of issues.  You can use this to collect eventlog data without using the UberAgent collector.
 
 Make sure to run this AFTER setting up your Elasticsearch for UberAgent Data.
 
