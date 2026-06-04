@@ -154,7 +154,7 @@
                           {
                             "targetBlank": true,
                             "title": "Application Details",
-                            "url": "https://ctxgrafana.unch.unc.edu/d/ced23ghwdexvkd/application-details?var-AppName=${__value.raw.fields[0]:raw}*"
+                            "url": "/d/ced23ghwdexvkd/application-details?var-AppName=${__value.raw.fields[0]:raw}*"
                           }
                         ]
                       },
