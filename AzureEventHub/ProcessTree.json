@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "adnmps7",
-    "generation": 7,
+    "generation": 10,
     "creationTimestamp": "2026-06-04T16:16:50Z",
     "labels": {},
     "annotations": {}
@@ -69,7 +69,7 @@
                           }
                         },
                         "pluginVersion": "7.2.6",
-                        "query": "// Process Startup\r\nlet Startup =\r\n    Process_ProcessStartup\r\n    | where $__timeFilter(Timestamp)\r\n    | where Host matches regex '[[Computer]]'\r\n    | where isnotempty(ProcParentGUID)\r\n    | project\r\n        ProcGUID,\r\n        Host,\r\n        ProcName,\r\n        PID = ProcID,\r\n        ProcParentName,\r\n        ParentPID = ProcParentID,\r\n        ProcParentGUID,\r\n        AppId,\r\n        AppVersion,\r\n        ProcCmdline,\r\n        IsElevated,\r\n        IsProtected,\r\n        TimestampProcStart = Timestamp;\r\n\r\n// Process Stop\r\nlet Stop =\r\n    Process_ProcessStop\r\n    | project\r\n        ProcGUID,\r\n        ProcLifetimeMs,\r\n        TimeStampProcStop = Timestamp;\r\n\r\n// Join Startup + Stop\r\nStartup\r\n| join kind=leftouter Stop on ProcGUID\r\n",
+                        "query": "// Process Startup\r\nlet Startup =\r\n    Process_ProcessStartup\r\n    | where $__timeFilter(Timestamp)\r\n    | where Host matches regex '[[Computer]]'\r\n    | where isnotempty(ProcParentGUID)\r\n    | project\r\n        ProcGUID,\r\n        Host,\r\n        ProcName,\r\n        PID = ProcID,\r\n        ProcParentName,\r\n        ParentPID = ProcParentID,\r\n        ProcParentGUID,\r\n        AppId,\r\n        AppVersion,\r\n        ProcCmdline,\r\n        IsElevated,\r\n        IsProtected,\r\n        TimestampProcStart = Timestamp;\r\n\r\n// Process Stop\r\nlet Stop =\r\n    Process_ProcessStop\r\n    | project\r\n        ProcGUID,\r\n        ProcLifetimeMs,\r\n        TimeStampProcStop = Timestamp;\r\n\r\n// AppId → AppName mapping\r\nlet Mapping =\r\n    Application_AppNameIdMapping\r\n    | where isnotempty(AppId)\r\n    | summarize AppName = any(AppName) by AppId;\r\n\r\n// Join Startup + Stop + Mapping\r\nStartup\r\n| join kind=leftouter Stop on ProcGUID\r\n| join kind=leftouter Mapping on AppId\r\n| project\r\n    Host,\r\n    ProcName,\r\n    PID,\r\n    ProcParentName,\r\n    ParentPID,\r\n    AppName,\r\n    AppVersion,\r\n    ProcCmdline,\r\n    IsElevated,\r\n    IsProtected,\r\n    TimestampProcStart,\r\n    TimeStampProcStop,\r\n    ProcLifetimeMs\r\n",
                         "querySource": "raw",
                         "queryType": "KQL",
                         "rawMode": true,
@@ -99,7 +99,7 @@
                 "sortBy": [
                   {
                     "desc": true,
-                    "displayName": "TimeStampProcStop"
+                    "displayName": "Host"
                   }
                 ]
               },
@@ -122,6 +122,7 @@
                     "cellOptions": {
                       "type": "auto"
                     },
+                    "filterable": true,
                     "footer": {
                       "reducers": []
                     },
@@ -333,6 +334,90 @@
                       {
                         "id": "custom.width",
                         "value": 156
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AppId"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 156
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Process Name"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 251
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "PID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 90
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "ParentPID"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 81
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "AppName"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 393
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Process Cmd Line"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 467
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "Process Parent Name"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 175
                       }
                     ]
                   }

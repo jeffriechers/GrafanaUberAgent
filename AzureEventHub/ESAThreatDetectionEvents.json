@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "ad5gshh",
-    "generation": 14,
+    "generation": 15,
     "creationTimestamp": "2026-06-04T11:22:38Z",
     "labels": {},
     "annotations": {}
@@ -167,7 +167,7 @@
                           }
                         },
                         "pluginVersion": "7.2.6",
-                        "query": "ActivityMonitoring_ProcessTagging\r\n| summarize Count = sum(EventCount) by AppId\r\n| order by Count desc",
+                        "query": "let Mapping =\r\n    Application_AppNameIdMapping\r\n    | where isnotempty(AppId)\r\n    | summarize AppName = any(AppName) by AppId;\r\n\r\nActivityMonitoring_ProcessTagging\r\n| summarize Count = sum(EventCount) by AppId\r\n| join kind=leftouter Mapping on AppId\r\n| project AppName, Count\r\n| order by Count desc\r\n",
                         "querySource": "raw",
                         "queryType": "KQL",
                         "rawMode": true,
